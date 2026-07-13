@@ -24,9 +24,9 @@ body{background:var(--bg);color:var(--txt);font-family:'Space Grotesk',system-ui
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px 0;position:relative}
 .scale{position:relative;width:min(1300px,92vw);height:auto;overflow-x:auto}
 .rail{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,#1E2129 0%,#232838 55%,#3A3320 85%,#4A3D18 100%);min-width:640px}
-.ticks{display:flex;min-width:640px;margin-top:8px}
-.tick{flex:1;text-align:left;position:relative}
-.tick::before{content:"";position:absolute;top:-14px;left:0;width:1px;height:10px;background:var(--line)}
+.ticks{position:relative;min-width:640px;height:20px;margin-top:8px}
+.tick{position:absolute;transform:translateX(-100%);white-space:nowrap}
+.tick::before{content:"";position:absolute;top:-22px;right:0;width:1px;height:10px;background:var(--line)}
 .tick span{font-family:'JetBrains Mono';font-size:11px;color:var(--faint)}
 .tick.t10 span{color:var(--gold)}
 .athrow{position:relative;min-width:640px;height:78px;margin-top:14px}
@@ -88,6 +88,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Space Grotesk',system-ui
 .readout{display:flex;gap:10px;margin-top:16px}
 .stat{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;text-align:center}
 .stat .big{font-family:'Unbounded';font-size:24px;font-weight:900;color:var(--ac);line-height:1}
+.stat .big.goal{font-family:'JetBrains Mono';font-size:13px;font-weight:600;color:var(--txt);line-height:1.35;padding-top:5px;min-height:32px;display:flex;align-items:center;justify-content:center}
 .stat .lbl{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;margin-top:6px;font-family:'JetBrains Mono'}
 .stat.delta .big{color:var(--txt)}
 .lvlname{margin-top:12px;font-size:13px;color:var(--dim);text-align:center;min-height:18px}
@@ -146,45 +147,45 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
 
     <div class="card" style="--ac:var(--sprint)">
       <h3 id="icon-fynn-slot">Fynn</h3>
-      <div class="sport">100m Sprint · WR 9,58s</div>
+      <div class="sport">100m Sprint · L10 = 11,0s</div>
       <div class="field"><label>Startzeit (Baseline, Sekunden)</label>
         <input type="number" step="0.01" id="fynn-start" value="15.00"></div>
       <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
         <input type="number" step="0.01" id="fynn-now" value="15.00"></div>
       <div class="readout">
         <div class="stat"><div class="big" id="fynn-lvl">–</div><div class="lbl">Level</div></div>
-        <div class="stat"><div class="big" id="fynn-pts">–</div><div class="lbl">Punkte</div></div>
         <div class="stat delta"><div class="big" id="fynn-delta">–</div><div class="lbl">Zuwachs</div></div>
+        <div class="stat"><div class="big goal" id="fynn-next">–</div><div class="lbl">Nächstes Ziel</div></div>
       </div>
       <div class="lvlname" id="fynn-name"></div>
     </div>
 
     <div class="card" style="--ac:var(--cali)">
       <h3 id="icon-niklas-slot">Niklas</h3>
-      <div class="sport">Calisthenics · Skill-Leiter</div>
-      <div class="field"><label>Start-Skill (höchster sauberer Skill)</label>
+      <div class="sport">Calisthenics · L10 = Full Planche</div>
+      <div class="field"><label>Start-Benchmark (höchster sauberer Skill)</label>
         <select id="niklas-start"></select></div>
-      <div class="field"><label>Aktueller Skill</label>
+      <div class="field"><label>Aktueller Benchmark</label>
         <select id="niklas-now"></select></div>
       <div class="readout">
         <div class="stat"><div class="big" id="niklas-lvl">–</div><div class="lbl">Level</div></div>
-        <div class="stat"><div class="big" id="niklas-pts">–</div><div class="lbl">Punkte</div></div>
         <div class="stat delta"><div class="big" id="niklas-delta">–</div><div class="lbl">Zuwachs</div></div>
+        <div class="stat"><div class="big goal" id="niklas-next">–</div><div class="lbl">Nächstes Ziel</div></div>
       </div>
       <div class="lvlname" id="niklas-name"></div>
     </div>
 
     <div class="card" style="--ac:var(--swim)">
       <h3 id="icon-alex-slot">Alex</h3>
-      <div class="sport">50m Freistil · WR 20,91s</div>
+      <div class="sport">50m Freistil · L10 = 25,0s</div>
       <div class="field"><label>Startzeit (Baseline, Sekunden)</label>
         <input type="number" step="0.01" id="alex-start" value="34.00"></div>
       <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
         <input type="number" step="0.01" id="alex-now" value="34.00"></div>
       <div class="readout">
         <div class="stat"><div class="big" id="alex-lvl">–</div><div class="lbl">Level</div></div>
-        <div class="stat"><div class="big" id="alex-pts">–</div><div class="lbl">Punkte</div></div>
         <div class="stat delta"><div class="big" id="alex-delta">–</div><div class="lbl">Zuwachs</div></div>
+        <div class="stat"><div class="big goal" id="alex-next">–</div><div class="lbl">Nächstes Ziel</div></div>
       </div>
       <div class="lvlname" id="alex-name"></div>
     </div>
@@ -193,9 +194,9 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
 
   <!-- Level-Zeiten (eigene Seite) -->
   <section class="sharebox">
-    <h2>Level-Zeiten</h2>
-    <p class="hint">Welche Zeit bringt welches Level? Jetzt auf einer eigenen Seite <span class="mono">(in Arbeit)</span>.</p>
-    <a class="backtop" href="level-zeiten.html">Level-Zeiten ansehen →</a>
+    <h2>Level-Übersicht</h2>
+    <p class="hint">Alle Schwellen für alle drei Disziplinen — welche Zeit bzw. welcher Skill bringt welches Level.</p>
+    <a class="backtop" href="level-zeiten.html">Level-Übersicht ansehen →</a>
   </section>
 
   <!-- Live-Sync-Status -->
@@ -204,12 +205,12 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
     <p class="hint" id="sync-msg">Verbinde …</p>
   </section>
 
-  <!-- Formel & Level-Bänder -->
+  <!-- Kalibrierung & Regeln -->
   <details>
-    <summary>Wie die Skala funktioniert (Formel & Level-Bänder)</summary>
-    <p>Zeiten werden über die offizielle Punkteformel des Schwimm- und Leichtathletik-Weltverbands normiert: <code>P = 1000 · (WR / Zeit)³</code>. 1000 Punkte = Weltrekord. Dadurch ist eine 34,0 im Becken direkt vergleichbar mit einer 13,5 auf der Bahn — beide drücken aus, wie nah man am menschlichen Maximum der Disziplin ist. Für Calisthenics gibt es keinen Weltrekord, deshalb ist jeder Benchmark-Skill von Hand auf dieselbe Punkteskala kalibriert.</p>
-    <p>Level-Bänder: L1 Rookie &lt;100 · L2 Einsteiger 100 · L3 Fortgeschritten 175 · L4 Solide 250 · L5 Athlet 330 · L6 Wettkämpfer 420 · L7 Vereinsspitze 520 · L8 Landesniveau 640 · L9 National 780 · L10 Weltklasse 900+.</p>
-    <p>Regeln für Fairness: Baseline-Test in Woche 1 unter Zeugen; identische Messbedingungen bei Start- und Endtest (Handstoppung nicht mit elektronischer Zeit mischen, gleiche Bahn, gleiches Becken); Videobeweis für jeden Calisthenics-Skill in sauberer Ausführung.</p>
+    <summary>Wie die Skala funktioniert (Level & Kalibrierung)</summary>
+    <p>Jede Disziplin hat 10 feste Schwellen. Kalibriert ist die Leiter über Seltenheit: <code>L10</code> — Full Planche, 11,0s auf 100m, 25,0s auf 50m Freistil — schafft jeweils grob einer von 5.000 Männern zwischen 20 und 30 (Top 0,02%). L1 ist die solide trainierte Basis (10 saubere Klimmzüge, 14,0s, 39,0s — Top ~12%). Dazwischen halbiert jedes Level ungefähr die Gruppe, die es noch schafft; deshalb werden die Zeitabstände nach oben kleiner.</p>
+    <p>Bei Zeiten wird zwischen zwei Schwellen linear interpoliert — der Marker wandert also auch innerhalb eines Levels. Wer die L1-Schwelle noch nicht geknackt hat, steht auf <code>L0</code>.</p>
+    <p>Regeln für Fairness: Baseline-Test in Woche 1 unter Zeugen; identische Messbedingungen bei Start- und Endtest (Handstoppung nicht mit elektronischer Zeit mischen, gleiche Bahn, gleiches Becken); Videobeweis für jeden Calisthenics-Benchmark in sauberer Ausführung (volle Bewegungsamplitude, kein Kipping, Haltezeiten wie angegeben).</p>
   </details>
 
   <a class="backtop" href="#top">↑ Zur Skala</a>
@@ -260,57 +261,81 @@ function iconFlex(level){
 document.getElementById('icon-fynn-slot').innerHTML=ICON_RUN+'Fynn';
 document.getElementById('icon-alex-slot').innerHTML=ICON_SWIM+'Alex';
 
-/* ---------- Skala ---------- */
-const BANDS=[0,100,175,250,330,420,520,640,780,900]; // Untergrenzen L1..L10
-const NAMES=["Rookie","Einsteiger","Fortgeschritten","Solide","Athlet","Wettkämpfer","Vereinsspitze","Landesniveau","National","Weltklasse"];
-const PMAX=1000;
-const WR={sprint:9.58, swim:20.91};
-
-const SKILLS=[
- [60,"1 sauberer Klimmzug / 10 Push-ups"],
- [100,"5 Klimmzüge · 5 Dips"],
- [140,"10 Klimmzüge · 15 Dips"],
- [175,"15 Klimmzüge · L-Sit 10s · Wand-Handstand"],
- [230,"20 Klimmzüge · freier Handstand 5s"],
- [280,"sauberer Muscle-up"],
- [340,"Handstand Push-up · Front Lever Tuck 10s"],
- [420,"Back Lever full · freier Handstand 30s"],
- [470,"Front Lever Straddle · Straddle-Planche-Lean"],
- [540,"Front Lever full 5s"],
- [640,"Straddle Planche / Hefesto"],
- [780,"One-Arm Pull-up / Full Planche 5s"],
- [900,"Full Planche Push-up · Maltese-Ansätze"]
+/* ---------- Level-Modell ----------
+   Feste Schwellen je Disziplin, kalibriert über Seltenheit:
+   L1 = solide trainierte Basis (Top ~12% der 20–30J), L10 = Top 0,02%.
+   Zeiten: erreicht, wenn <= Schwelle. Unter L1 = L0. */
+const LEVELS={
+  sprint:[14.0,13.5,13.0,12.6,12.2,11.9,11.6,11.4,11.2,11.0],
+  swim:  [39.0,36.5,34.5,32.5,31.0,29.5,28.0,27.0,26.0,25.0]
+};
+const L0ANCHOR={sprint:15.5, swim:45.0}; // virtueller L0-Start für Fortschritt unterhalb L1
+const CALI=[
+  "10 saubere Klimmzüge",
+  "L-Sit 15s",
+  "Freier Handstand 20s",
+  "Muscle-up (sauber)",
+  "Back Lever full 5s",
+  "Front Lever Straddle 5s",
+  "Straddle Press to Handstand",
+  "Front Lever full 5s",
+  "Straddle Planche 5s",
+  "Full Planche 5s"
 ];
+const TOP_PCT=[12,6,3,1.5,0.8,0.4,0.2,0.1,0.05,0.02];
 
-function pointsTime(sport,t){ if(!t||t<=0) return 0; return Math.min(PMAX, 1000*Math.pow(WR[sport]/t,3)); }
-function level(p){ let l=1; for(let i=0;i<BANDS.length;i++){ if(p>=BANDS[i]) l=i+1; } return l; }
-function pct(p){ // Position auf der Leiste 0..100%, Level-Bänder gleich breit
-  const l=level(p); const lo=BANDS[l-1]; const hi=(l<10)?BANDS[l]:PMAX;
-  const frac=Math.min(1,(p-lo)/(hi-lo||1));
-  return ((l-1)+frac)/10*100;
+/* levelFloat: 0..10 — Ganzzahl = erreichtes Level, Nachkomma = Fortschritt zur nächsten Schwelle */
+function levelFloatTime(sport,t){
+  const thr=LEVELS[sport];
+  if(!t||t<=0) return 0;
+  if(t>thr[0]){
+    const a=L0ANCHOR[sport];
+    if(t>=a) return 0;
+    return (a-t)/(a-thr[0]);
+  }
+  let lv=0;
+  for(let i=0;i<thr.length;i++){ if(t<=thr[i]) lv=i+1; }
+  if(lv>=10) return 10;
+  const hi=thr[lv-1], lo=thr[lv];
+  return lv+(hi-t)/(hi-lo);
 }
 
-/* ---------- Ticks ---------- */
-const ticks=document.getElementById('ticks');
-for(let i=1;i<=10;i++){const d=document.createElement('div');d.className='tick'+(i===10?' t10':'');d.innerHTML='<span>L'+i+'</span>';ticks.appendChild(d);}
+function fmtPct(p){
+  const s=(p<1?p.toFixed(2):p<10?p.toFixed(1):String(Math.round(p)));
+  return s.replace(/\.?0+$/,'').replace('.',',')+'%';
+}
+function fmtT(t){ return t.toFixed(1).replace('.',',')+' s'; }
 
-/* ---------- Calisthenics-Dropdowns ---------- */
+/* ---------- Ticks (L1 bei 10% … L10 bei 100%) ---------- */
+const ticks=document.getElementById('ticks');
+for(let i=1;i<=10;i++){
+  const d=document.createElement('div');
+  d.className='tick'+(i===10?' t10':'');
+  d.style.left=(i*10)+'%';
+  d.innerHTML='<span>L'+i+'</span>';
+  ticks.appendChild(d);
+}
+
+/* ---------- Benchmark-Dropdowns ---------- */
 for(const id of ['niklas-start','niklas-now']){
   const sel=document.getElementById(id);
-  const none=document.createElement('option');none.value=0;none.textContent='— noch keiner —';sel.appendChild(none);
-  SKILLS.forEach(([p,n])=>{const o=document.createElement('option');o.value=p;o.textContent=n;sel.appendChild(o);});
+  const none=document.createElement('option');none.value=0;none.textContent='— unter L1 —';sel.appendChild(none);
+  CALI.forEach((n,i)=>{const o=document.createElement('option');o.value=i+1;o.textContent='L'+(i+1)+' · '+n;sel.appendChild(o);});
 }
-document.getElementById('niklas-start').value=100;
-document.getElementById('niklas-now').value=100;
+document.getElementById('niklas-start').value=0;
+document.getElementById('niklas-now').value=0;
 
 /* ---------- Athleten ---------- */
 const A=[
  {id:'fynn',   name:'Fynn',   sport:'100m Sprint',   color:'var(--sprint)',
-   get:(k)=>pointsTime('sprint', parseFloat(document.getElementById('fynn-'+k).value))},
+   get:(k)=>levelFloatTime('sprint', parseFloat(document.getElementById('fynn-'+k).value)),
+   next:(lv)=>lv>=10?'—':'≤ '+fmtT(LEVELS.sprint[lv])},
  {id:'niklas', name:'Niklas', sport:'Calisthenics',  color:'var(--cali)',
-   get:(k)=>parseFloat(document.getElementById('niklas-'+k).value)||0},
+   get:(k)=>Math.max(0,Math.min(10,parseInt(document.getElementById('niklas-'+k).value)||0)),
+   next:(lv)=>lv>=10?'—':CALI[lv]},
  {id:'alex',   name:'Alex',   sport:'50m Freistil',  color:'var(--swim)',
-   get:(k)=>pointsTime('swim', parseFloat(document.getElementById('alex-'+k).value))}
+   get:(k)=>levelFloatTime('swim', parseFloat(document.getElementById('alex-'+k).value)),
+   next:(lv)=>lv>=10?'—':'≤ '+fmtT(LEVELS.swim[lv])}
 ];
 
 function iconFor(a,lv){ return a.id==='niklas' ? iconFlex(lv) : (a.id==='fynn' ? ICON_RUN : ICON_SWIM); }
@@ -318,17 +343,17 @@ function iconFor(a,lv){ return a.id==='niklas' ? iconFlex(lv) : (a.id==='fynn' ?
 function render(){
   const legendHtml=[];
   for(const a of A){
-    const ps=a.get('start'), pn=a.get('now');
-    const lv=level(pn), d=pn-ps;
+    const vs=a.get('start'), vn=a.get('now');
+    const lv=Math.floor(vn), d=vn-vs;
     document.getElementById(a.id+'-lvl').textContent='L'+lv;
-    document.getElementById(a.id+'-pts').textContent=Math.round(pn);
-    document.getElementById(a.id+'-delta').textContent=(d>=0?'+':'')+Math.round(d);
-    document.getElementById(a.id+'-name').textContent=NAMES[lv-1];
+    document.getElementById(a.id+'-delta').textContent=(d>=0?'+':'')+d.toFixed(1).replace('.',',')+' Lv';
+    document.getElementById(a.id+'-next').textContent=a.next(lv);
+    document.getElementById(a.id+'-name').textContent= lv>0 ? 'Top '+fmtPct(TOP_PCT[lv-1])+' der 20–30-Jährigen' : 'noch unter Level 1';
     const icon=iconFor(a,lv);
     if(a.id==='niklas'){ document.getElementById('icon-niklas-slot').innerHTML=icon+'Niklas'; }
-    // Leiter
+    // Leiter: Position = levelFloat/10
     const row=document.getElementById('row-'+a.id);
-    const x0=pct(ps), x1=pct(pn);
+    const x0=vs*10, x1=vn*10;
     row.innerHTML=
       '<div class="seg" style="left:'+Math.min(x0,x1)+'%;width:'+Math.abs(x1-x0)+'%;background:'+a.color+'"></div>'+
       '<div class="ghost" style="left:'+x0+'%;color:'+a.color+'"></div>'+

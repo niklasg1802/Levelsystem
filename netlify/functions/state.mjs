@@ -3,11 +3,10 @@ import { getStore } from "@netlify/blobs";
 const DEFAULT_STATE = {
   "fynn-start": "15.00",
   "fynn-now": "15.00",
-  "niklas-start": "100",
-  "niklas-now": "100",
+  "niklas-start": "0",
+  "niklas-now": "0",
   "alex-start": "34.00",
-  "alex-now": "34.00",
-  "alpha": "25"
+  "alex-now": "34.00"
 };
 
 const cors = {
