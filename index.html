@@ -8,10 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --plum:#301B28; --brown:#523634; --rust:#B6452C; --sand:#DDC5A2;
-  --sand-dim:rgba(221,197,162,.58); --sand-faint:rgba(221,197,162,.28);
-  --ink:#301B28; --ink-dim:rgba(48,27,40,.64); --ink-faint:rgba(48,27,40,.4);
-  --line:rgba(48,27,40,.18); --line-dark:rgba(221,197,162,.16);
+  --plum:#080706; --brown:#594D46; --rust:#D1B280; --sand:#EFEFEF;
+  --sand-dim:rgba(239,239,239,.58); --sand-faint:rgba(239,239,239,.28);
+  --ink:#080706; --ink-dim:rgba(8,7,6,.64); --ink-faint:rgba(8,7,6,.4);
+  --line:rgba(8,7,6,.18); --line-dark:rgba(239,239,239,.16);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -25,7 +25,7 @@ body{background:var(--sand);color:var(--ink);font-family:'Instrument Sans',syste
 
 .scale{position:relative;width:min(1300px,92vw);height:auto;overflow-x:auto;padding:0 56px}
 @media(max-width:720px){.scale{padding:0 44px}}
-.rail{position:relative;height:2px;background:linear-gradient(90deg,rgba(221,197,162,.1),rgba(221,197,162,.28) 65%,rgba(182,69,44,.9));min-width:640px}
+.rail{position:relative;height:2px;background:linear-gradient(90deg,rgba(239,239,239,.1),rgba(239,239,239,.28) 65%,rgba(209,178,128,.9));min-width:640px}
 .ticks{position:relative;min-width:640px;height:24px;margin-top:10px}
 .tick{position:absolute;transform:translateX(-100%);white-space:nowrap}
 .tick::before{content:"";position:absolute;top:-26px;right:0;width:1px;height:12px;background:var(--line-dark)}
@@ -34,7 +34,7 @@ body{background:var(--sand);color:var(--ink);font-family:'Instrument Sans',syste
 .athrow{position:relative;min-width:640px;height:78px;margin-top:14px;transition:opacity .5s}
 .athrow.pending{opacity:0}
 .seg{position:absolute;top:33px;height:4px;border-radius:2px;background:var(--rust);opacity:.3}
-.marker{position:absolute;top:2px;width:50px;height:50px;border-radius:50%;background:#3B2231;border:1.5px solid var(--rust);color:var(--sand);transform:translateX(-50%);box-shadow:0 8px 26px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;transition:left .6s cubic-bezier(.2,.8,.2,1)}
+.marker{position:absolute;top:2px;width:50px;height:50px;border-radius:50%;background:#171512;border:1.5px solid var(--rust);color:var(--sand);transform:translateX(-50%);box-shadow:0 8px 26px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;transition:left .6s cubic-bezier(.2,.8,.2,1)}
 .marker svg{width:30px;height:30px;color:currentColor;overflow:visible}
 .athlabel{position:absolute;top:-6px;transform:translateX(-50%);font-size:10px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;font-weight:600;color:var(--sand);transition:left .6s cubic-bezier(.2,.8,.2,1)}
 
@@ -89,7 +89,7 @@ body{background:var(--sand);color:var(--ink);font-family:'Instrument Sans',syste
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 
 /* fließender Übergang dunkel → hell */
-.blend{height:200px;background:linear-gradient(180deg,#301B28 0%,#523634 42%,#8A6752 72%,#DDC5A2 100%)}
+.blend{height:200px;background:linear-gradient(180deg,#080706 0%,#594D46 42%,#A7A19D 72%,#EFEFEF 100%)}
 
 /* ============ Update-Bereich — hell, offen, eine Bildschirmseite ============ */
 .light{padding:0 0 96px}
@@ -102,12 +102,12 @@ body{background:var(--sand);color:var(--ink);font-family:'Instrument Sans',syste
 .ath{padding:clamp(10px,2.4vh,28px) 0}
 .ath-head{display:flex;align-items:baseline;gap:20px}
 .ath-head h3{font-family:'Fraunces',serif;font-size:clamp(24px,3.6vh,34px);font-weight:600;display:flex;align-items:center;gap:14px;letter-spacing:-.01em}
-.ath-head h3 svg{width:26px;height:26px;color:var(--rust);overflow:visible;flex:none}
+.ath-head h3 svg{width:26px;height:26px;color:var(--brown);overflow:visible;flex:none}
 .ath-head .rule{flex:1;height:1px;background:var(--line);align-self:center}
 .ath-head .sport{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-dim);white-space:nowrap}
 
 .ath-grid{display:flex;gap:48px;align-items:flex-end;margin-top:18px;flex-wrap:wrap}
-.stat .big{font-family:'Fraunces',serif;font-size:clamp(30px,4.4vh,42px);font-weight:500;color:var(--rust);line-height:1;letter-spacing:-.01em}
+.stat .big{font-family:'Fraunces',serif;font-size:clamp(30px,4.4vh,42px);font-weight:500;color:var(--brown);line-height:1;letter-spacing:-.01em}
 .stat.delta .big{color:var(--ink)}
 .stat .big.goal{font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:500;color:var(--ink);line-height:1.45;max-width:270px;min-height:40px;display:flex;align-items:flex-end}
 .stat .lbl{font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.2em;margin-top:8px}
@@ -118,17 +118,17 @@ body{background:var(--sand);color:var(--ink);font-family:'Instrument Sans',syste
 .field label{display:block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px}
 .field input,.field select{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);border-radius:0;padding:7px 2px;color:var(--ink);outline:none;transition:border-color .2s}
 .field input{font-family:'Fraunces',serif;font-size:26px;font-weight:500}
-.field input:focus,.field select:focus{border-bottom-color:var(--rust)}
+.field input:focus,.field select:focus{border-bottom-color:var(--brown)}
 /* native Spinner aus — eigene Pfeile im Look der Seite */
 .field input[type=number]::-webkit-outer-spin-button,.field input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .field input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .step{position:absolute;right:0;bottom:9px;display:flex;flex-direction:column;gap:1px;opacity:0;transition:opacity .25s}
 .field:hover .step,.field:focus-within .step{opacity:1}
 .step button{all:unset;cursor:pointer;width:24px;height:14px;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);transition:color .15s}
-.step button:hover{color:var(--rust)}
+.step button:hover{color:var(--brown)}
 .step svg{width:12px;height:12px}
 /* Dropdown (Niklas) im gleichen Look */
-.field select{font-family:'Instrument Sans',sans-serif;font-size:15px;cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23B6452C' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:12px}
+.field select{font-family:'Instrument Sans',sans-serif;font-size:15px;cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23594D46' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:12px}
 .field select option{background:var(--sand);color:var(--ink)}
 .field.stage{display:none}
 .field.stage.show{display:block}
@@ -139,11 +139,11 @@ body{background:var(--sand);color:var(--ink);font-family:'Instrument Sans',syste
 .overview-link{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:40px 0;margin-top:0;font-family:'Fraunces',serif;font-size:clamp(24px,3.6vw,36px);font-weight:550;color:var(--ink);text-decoration:none;letter-spacing:-.01em;transition:color .2s}
 .overview-link small{display:block;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:400;color:var(--ink-dim);letter-spacing:0;margin-top:8px}
 .overview-link .arrow{font-family:'Fraunces',serif;font-size:1.1em;transition:transform .25s}
-.overview-link:hover{color:var(--rust)}
+.overview-link:hover{color:var(--brown)}
 .overview-link:hover .arrow{transform:translateX(8px)}
 
 .backtop{display:inline-flex;align-items:center;gap:8px;margin-top:44px;color:var(--ink-faint);font-size:11px;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;transition:color .2s}
-.backtop:hover{color:var(--rust)}
+.backtop:hover{color:var(--brown)}
 
 @media(max-width:680px){
   .ath-grid{gap:28px}
