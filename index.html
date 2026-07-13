@@ -212,15 +212,10 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
     <p class="hint">Score = (1−α)·Endpunkte + α·2·(Endpunkte − Startpunkte). Bei 0% zählt nur der absolute Endstand; je höher der Regler, desto stärker wird der individuelle Fortschritt seit der Baseline belohnt. Legt den Wert vor dem Start gemeinsam fest und lasst ihn dann fix.</p>
   </section>
 
-  <!-- Stand teilen -->
+  <!-- Live-Sync-Status -->
   <section class="sharebox">
-    <h2>Stand teilen (WhatsApp)</h2>
-    <div class="share-row">
-      <button class="btn primary" id="btn-copy">Stand als Code kopieren</button>
-      <input type="text" id="code-in" placeholder="Code hier einfügen …">
-      <button class="btn" id="btn-load">Laden</button>
-    </div>
-    <p class="hint" id="share-msg">Kopiert den kompletten aktuellen Stand (alle Zeiten, Skills und der Wertungsregler) als kurzen Code. In die Gruppe schicken, die anderen fügen ihn hier ein und drücken Laden — schon haben alle denselben Stand.</p>
+    <h2>Live-Sync</h2>
+    <p class="hint" id="sync-msg">Verbinde …</p>
   </section>
 
   <!-- Formel & Level-Bänder -->
@@ -333,37 +328,56 @@ function fillTables(){
   }
 }
 
-/* ---------- Stand teilen ---------- */
+/* ---------- Live-Sync über Netlify Function + Blobs ---------- */
 const FIELDS=['fynn-start','fynn-now','niklas-start','niklas-now','alex-start','alex-now','alpha'];
-function makeCode(){
-  return 'MAX1-'+btoa(FIELDS.map(f=>document.getElementById(f).value).join('|'));
+const API='/api/state';
+const syncMsg=document.getElementById('sync-msg');
+let pushTimer=null;
+
+function applyState(state){
+  FIELDS.forEach(f=>{
+    if(state[f]===undefined) return;
+    const el=document.getElementById(f);
+    if(document.activeElement===el) return; // eigene Eingabe nicht überschreiben
+    if(el.value!==String(state[f])) el.value=state[f];
+  });
+  render();
 }
-function loadCode(str){
+
+async function pullState(){
   try{
-    const s=str.trim();
-    if(!s.startsWith('MAX1-')) throw 0;
-    const vals=atob(s.slice(5)).split('|');
-    if(vals.length!==FIELDS.length) throw 0;
-    FIELDS.forEach((f,i)=>{document.getElementById(f).value=vals[i];});
-    render();
-    return true;
-  }catch(e){ return false; }
+    const res=await fetch(API);
+    const state=await res.json();
+    applyState(state);
+    syncMsg.textContent='Live synchronisiert · zuletzt aktualisiert '+new Date().toLocaleTimeString('de-DE');
+  }catch(e){
+    syncMsg.textContent='Sync fehlgeschlagen — Änderungen werden nur lokal angezeigt.';
+  }
 }
-document.getElementById('btn-copy').addEventListener('click',()=>{
-  const code=makeCode(); const msg=document.getElementById('share-msg');
-  const done=()=>{msg.textContent='Kopiert! Einfach in die WhatsApp-Gruppe einfügen: '+code;};
-  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(code).then(done).catch(()=>{msg.textContent='Code (manuell kopieren): '+code;}); }
-  else{ msg.textContent='Code (manuell kopieren): '+code; }
-});
-document.getElementById('btn-load').addEventListener('click',()=>{
-  const ok=loadCode(document.getElementById('code-in').value);
-  document.getElementById('share-msg').textContent= ok ? 'Stand geladen — alle Werte übernommen.' : 'Code nicht erkannt. Muss mit MAX1- beginnen und vollständig eingefügt sein.';
-});
+
+async function pushState(){
+  const patch={};
+  FIELDS.forEach(f=>{ patch[f]=document.getElementById(f).value; });
+  try{
+    await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(patch)});
+    syncMsg.textContent='Gespeichert · '+new Date().toLocaleTimeString('de-DE');
+  }catch(e){
+    syncMsg.textContent='Speichern fehlgeschlagen — bitte Verbindung prüfen.';
+  }
+}
+
+function scheduleSave(){
+  syncMsg.textContent='Speichere …';
+  clearTimeout(pushTimer);
+  pushTimer=setTimeout(pushState,600);
+}
 
 const _render=render;
 render=function(){ _render(); fillTables(); };
-document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',render));
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>{ render(); scheduleSave(); }));
 render();
+pullState();
+setInterval(pullState,4000);
 </script>
 </body>
 </html>
