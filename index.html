@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAXIMUM — 6-Monats-Challenge Levelsystem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C10; --panel:#14161C; --panel2:#1A1D25; --line:#272B36;
+  --txt:#E8EAF0; --dim:#8B90A0; --faint:#565B6B;
+  --swim:#38BDF8; --sprint:#FB923C; --cali:#A78BFA;
+  --gold:#F5C84B;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;padding-bottom:80px}
+.mono{font-family:'JetBrains Mono',monospace}
+
+header{padding:48px 24px 8px;max-width:1100px;margin:0 auto}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;color:var(--faint);text-transform:uppercase}
+h1{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(34px,7vw,64px);line-height:1.02;margin:10px 0 6px;letter-spacing:-.01em}
+h1 .l10{color:var(--gold)}
+.sub{color:var(--dim);font-size:15px;max-width:620px;line-height:1.55}
+
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ============ SIGNATURE: gemeinsame Leiter ============ */
+.ladder{margin:44px 0 12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px 22px 18px;overflow-x:auto}
+.ladder h2{font-family:'Unbounded';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:22px}
+.scale{position:relative;min-width:640px;height:auto}
+.rail{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,#1E2129 0%,#232838 55%,#3A3320 85%,#4A3D18 100%);border:1px solid var(--line)}
+.ticks{display:flex;min-width:640px;margin-top:8px}
+.tick{flex:1;text-align:left;position:relative}
+.tick::before{content:"";position:absolute;top:-16px;left:0;width:1px;height:10px;background:var(--line)}
+.tick span{font-family:'JetBrains Mono';font-size:11px;color:var(--faint)}
+.tick.t10 span{color:var(--gold)}
+.athrow{position:relative;min-width:640px;height:46px;margin-top:6px}
+.seg{position:absolute;top:19px;height:8px;border-radius:4px;opacity:.32}
+.dot{position:absolute;top:12px;width:22px;height:22px;border-radius:50%;border:3px solid var(--bg);transform:translateX(-50%);box-shadow:0 0 0 2px currentColor, 0 4px 14px rgba(0,0,0,.5);transition:left .5s cubic-bezier(.2,.8,.2,1)}
+.ghost{position:absolute;top:15px;width:16px;height:16px;border-radius:50%;border:2px dashed currentColor;background:transparent;transform:translateX(-50%);opacity:.55;transition:left .5s}
+.athlabel{position:absolute;top:-2px;transform:translateX(-50%);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.08em;white-space:nowrap;font-weight:600}
+.legend{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap}
+.legend div{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:7px}
+.swatch{width:10px;height:10px;border-radius:50%}
+
+/* ============ Athleten-Karten ============ */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:26px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--ac)}
+.card h3{font-family:'Unbounded';font-size:17px;font-weight:700}
+.card .sport{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ac);margin:3px 0 18px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--dim);margin-bottom:6px}
+.field input,.field select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--txt);font-family:'JetBrains Mono';font-size:15px;outline:none;transition:border-color .15s}
+.field input:focus,.field select:focus{border-color:var(--ac)}
+.readout{display:flex;gap:10px;margin-top:16px}
+.stat{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;text-align:center}
+.stat .big{font-family:'Unbounded';font-size:24px;font-weight:900;color:var(--ac);line-height:1}
+.stat .lbl{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;margin-top:6px;font-family:'JetBrains Mono'}
+.stat.delta .big{color:var(--txt)}
+.lvlname{margin-top:12px;font-size:13px;color:var(--dim);text-align:center;min-height:18px}
+
+/* ============ Wertung ============ */
+.rankbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:8px}
+.rankbox h2{font-family:'Unbounded';font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.slider-row{display:flex;align-items:center;gap:14px;margin:18px 0 22px;flex-wrap:wrap}
+.slider-row label{font-size:13px;color:var(--dim);white-space:nowrap}
+input[type=range]{flex:1;min-width:160px;accent-color:var(--gold);height:4px}
+.alpha-val{font-family:'JetBrains Mono';font-size:13px;color:var(--gold);min-width:120px}
+table{width:100%;border-collapse:collapse}
+th{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:13px 10px;border-bottom:1px solid var(--line);font-size:14px}
+tr:last-child td{border-bottom:none}
+td.pos{font-family:'Unbounded';font-weight:900;font-size:18px;width:44px}
+tr.first td.pos{color:var(--gold)}
+td .name{font-weight:600}
+td .sp{font-size:11px;color:var(--dim);font-family:'JetBrains Mono')}
+td.score{font-family:'JetBrains Mono';font-weight:600;font-size:16px;text-align:right}
+.hint{font-size:12px;color:var(--faint);margin-top:14px;line-height:1.6}
+
+/* ============ Formel / Regeln ============ */
+details{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+summary{cursor:pointer;font-size:13px;color:var(--dim);font-weight:600}
+details p{font-size:13px;color:var(--dim);line-height:1.7;margin-top:12px}
+details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);background:var(--panel2);padding:2px 6px;border-radius:5px}
+
+.lvl-tables{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.lvl-tables td{padding:8px 10px;font-family:'JetBrains Mono';font-size:13px}
+.lvl-tables td:first-child{font-weight:600}
+.lvl-tables tr.hit td{color:var(--gold)}
+.lvl-tables td:last-child{text-align:right;color:var(--faint)}
+
+.sharebox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:16px}
+.sharebox h2{font-family:'Unbounded';font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.share-row{display:flex;gap:10px;flex-wrap:wrap}
+.share-row input{flex:1;min-width:200px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--txt);font-family:'JetBrains Mono';font-size:12px;outline:none}
+.btn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 18px;color:var(--txt);font-family:'Space Grotesk';font-size:13px;font-weight:600;cursor:pointer;transition:border-color .15s}
+.btn:hover,.btn:focus-visible{border-color:var(--gold)}
+.btn.primary{border-color:var(--gold);color:var(--gold)}
+
+@media(max-width:600px){header{padding-top:32px}.readout{flex-wrap:wrap}.stat{min-width:44%}.lvl-tables{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.dot,.ghost{transition:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">6 Monate · Ein Ziel · Drei Disziplinen</div>
+  <h1>MAXIMUM <span class="l10">/ L10</span></h1>
+  <p class="sub">Jede Leistung wird über die World-Record-Punkteformel auf eine gemeinsame Skala von Level 1 (Anfänger) bis Level 10 (Weltklasse) übersetzt. Egal wo du startest — es zählt, wo du am Ende stehst.</p>
+</header>
+
+<div class="wrap">
+
+  <!-- Gemeinsame Leiter -->
+  <section class="ladder">
+    <h2>Die gemeinsame Skala</h2>
+    <div class="scale">
+      <div class="rail"></div>
+      <div class="ticks" id="ticks"></div>
+      <div class="athrow" id="row-fynn"></div>
+      <div class="athrow" id="row-niklas"></div>
+      <div class="athrow" id="row-alex"></div>
+    </div>
+    <div class="legend">
+      <div><span class="swatch" style="background:var(--sprint)"></span>Fynn · 100m Sprint</div>
+      <div><span class="swatch" style="background:var(--cali)"></span>Niklas · Calisthenics</div>
+      <div><span class="swatch" style="background:var(--swim)"></span>Alex · 50m Freistil</div>
+      <div><span class="swatch" style="border:2px dashed var(--faint);background:transparent"></span>gestrichelt = Startpunkt</div>
+    </div>
+  </section>
+
+  <!-- Eingabe-Karten -->
+  <section class="cards">
+
+    <div class="card" style="--ac:var(--sprint)">
+      <h3>Fynn</h3>
+      <div class="sport">100m Sprint · WR 9,58s</div>
+      <div class="field"><label>Startzeit (Baseline, Sekunden)</label>
+        <input type="number" step="0.01" id="fynn-start" value="15.00"></div>
+      <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
+        <input type="number" step="0.01" id="fynn-now" value="15.00"></div>
+      <div class="readout">
+        <div class="stat"><div class="big" id="fynn-lvl">–</div><div class="lbl">Level</div></div>
+        <div class="stat"><div class="big" id="fynn-pts">–</div><div class="lbl">Punkte</div></div>
+        <div class="stat delta"><div class="big" id="fynn-delta">–</div><div class="lbl">Zuwachs</div></div>
+      </div>
+      <div class="lvlname" id="fynn-name"></div>
+    </div>
+
+    <div class="card" style="--ac:var(--cali)">
+      <h3>Niklas</h3>
+      <div class="sport">Calisthenics · Skill-Leiter</div>
+      <div class="field"><label>Start-Skill (höchster sauberer Skill)</label>
+        <select id="niklas-start"></select></div>
+      <div class="field"><label>Aktueller Skill</label>
+        <select id="niklas-now"></select></div>
+      <div class="readout">
+        <div class="stat"><div class="big" id="niklas-lvl">–</div><div class="lbl">Level</div></div>
+        <div class="stat"><div class="big" id="niklas-pts">–</div><div class="lbl">Punkte</div></div>
+        <div class="stat delta"><div class="big" id="niklas-delta">–</div><div class="lbl">Zuwachs</div></div>
+      </div>
+      <div class="lvlname" id="niklas-name"></div>
+    </div>
+
+    <div class="card" style="--ac:var(--swim)">
+      <h3>Alex</h3>
+      <div class="sport">50m Freistil · WR 20,91s</div>
+      <div class="field"><label>Startzeit (Baseline, Sekunden)</label>
+        <input type="number" step="0.01" id="alex-start" value="34.00"></div>
+      <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
+        <input type="number" step="0.01" id="alex-now" value="34.00"></div>
+      <div class="readout">
+        <div class="stat"><div class="big" id="alex-lvl">–</div><div class="lbl">Level</div></div>
+        <div class="stat"><div class="big" id="alex-pts">–</div><div class="lbl">Punkte</div></div>
+        <div class="stat delta"><div class="big" id="alex-delta">–</div><div class="lbl">Zuwachs</div></div>
+      </div>
+      <div class="lvlname" id="alex-name"></div>
+    </div>
+
+  </section>
+
+  <!-- Level-Zeiten -->
+  <section class="rankbox" style="margin-bottom:16px">
+    <h2>Level-Zeiten — welche Zeit bringt welches Level</h2>
+    <div class="lvl-tables">
+      <table>
+        <thead><tr><th style="color:var(--sprint)">100m Sprint</th><th>ab Zeit</th><th style="text-align:right">Punkte</th></tr></thead>
+        <tbody id="tbl-sprint"></tbody>
+      </table>
+      <table>
+        <thead><tr><th style="color:var(--swim)">50m Freistil</th><th>ab Zeit</th><th style="text-align:right">Punkte</th></tr></thead>
+        <tbody id="tbl-swim"></tbody>
+      </table>
+    </div>
+    <p class="hint">Die Zeit ist jeweils die Schwelle: schneller oder gleich heißt Level erreicht. L1 gilt für alles darüber.</p>
+  </section>
+
+  <!-- Wertung -->
+  <section class="rankbox">
+    <h2>Rangliste</h2>
+    <div class="slider-row">
+      <label>Wertungsmodus:</label>
+      <input type="range" id="alpha" min="0" max="100" value="25">
+      <span class="alpha-val" id="alpha-label">25% Fortschritt</span>
+    </div>
+    <table>
+      <thead><tr><th>#</th><th>Athlet</th><th>Level</th><th style="text-align:right">Score</th></tr></thead>
+      <tbody id="ranking"></tbody>
+    </table>
+    <p class="hint">Score = (1−α)·Endpunkte + α·2·(Endpunkte − Startpunkte). Bei 0% zählt nur der absolute Endstand; je höher der Regler, desto stärker wird der individuelle Fortschritt seit der Baseline belohnt. Legt den Wert vor dem Start gemeinsam fest und lasst ihn dann fix.</p>
+  </section>
+
+  <!-- Stand teilen -->
+  <section class="sharebox">
+    <h2>Stand teilen (WhatsApp)</h2>
+    <div class="share-row">
+      <button class="btn primary" id="btn-copy">Stand als Code kopieren</button>
+      <input type="text" id="code-in" placeholder="Code hier einfügen …">
+      <button class="btn" id="btn-load">Laden</button>
+    </div>
+    <p class="hint" id="share-msg">Kopiert den kompletten aktuellen Stand (alle Zeiten, Skills und der Wertungsregler) als kurzen Code. In die Gruppe schicken, die anderen fügen ihn hier ein und drücken Laden — schon haben alle denselben Stand.</p>
+  </section>
+
+  <!-- Formel & Level-Bänder -->
+  <details>
+    <summary>Wie die Skala funktioniert (Formel & Level-Bänder)</summary>
+    <p>Zeiten werden über die offizielle Punkteformel des Schwimm- und Leichtathletik-Weltverbands normiert: <code>P = 1000 · (WR / Zeit)³</code>. 1000 Punkte = Weltrekord. Dadurch ist eine 34,0 im Becken direkt vergleichbar mit einer 13,5 auf der Bahn — beide drücken aus, wie nah man am menschlichen Maximum der Disziplin ist. Für Calisthenics gibt es keinen Weltrekord, deshalb ist jeder Benchmark-Skill von Hand auf dieselbe Punkteskala kalibriert.</p>
+    <p>Level-Bänder: L1 Rookie &lt;100 · L2 Einsteiger 100 · L3 Fortgeschritten 175 · L4 Solide 250 · L5 Athlet 330 · L6 Wettkämpfer 420 · L7 Vereinsspitze 520 · L8 Landesniveau 640 · L9 National 780 · L10 Weltklasse 900+.</p>
+    <p>Regeln für Fairness: Baseline-Test in Woche 1 unter Zeugen; identische Messbedingungen bei Start- und Endtest (Handstoppung nicht mit elektronischer Zeit mischen, gleiche Bahn, gleiches Becken); Videobeweis für jeden Calisthenics-Skill in sauberer Ausführung.</p>
+  </details>
+
+</div>
+
+<script>
+/* ---------- Skala ---------- */
+const BANDS=[0,100,175,250,330,420,520,640,780,900]; // Untergrenzen L1..L10
+const NAMES=["Rookie","Einsteiger","Fortgeschritten","Solide","Athlet","Wettkämpfer","Vereinsspitze","Landesniveau","National","Weltklasse"];
+const PMAX=1000;
+const WR={sprint:9.58, swim:20.91};
+
+const SKILLS=[
+ [60,"1 sauberer Klimmzug / 10 Push-ups"],
+ [100,"5 Klimmzüge · 5 Dips"],
+ [140,"10 Klimmzüge · 15 Dips"],
+ [175,"15 Klimmzüge · L-Sit 10s · Wand-Handstand"],
+ [230,"20 Klimmzüge · freier Handstand 5s"],
+ [280,"sauberer Muscle-up"],
+ [340,"Handstand Push-up · Front Lever Tuck 10s"],
+ [420,"Back Lever full · freier Handstand 30s"],
+ [470,"Front Lever Straddle · Straddle-Planche-Lean"],
+ [540,"Front Lever full 5s"],
+ [640,"Straddle Planche / Hefesto"],
+ [780,"One-Arm Pull-up / Full Planche 5s"],
+ [900,"Full Planche Push-up · Maltese-Ansätze"]
+];
+
+function pointsTime(sport,t){ if(!t||t<=0) return 0; return Math.min(PMAX, 1000*Math.pow(WR[sport]/t,3)); }
+function level(p){ let l=1; for(let i=0;i<BANDS.length;i++){ if(p>=BANDS[i]) l=i+1; } return l; }
+function pct(p){ // Position auf der Leiste 0..100%, Level-Bänder gleich breit
+  const l=level(p); const lo=BANDS[l-1]; const hi=(l<10)?BANDS[l]:PMAX;
+  const frac=Math.min(1,(p-lo)/(hi-lo||1));
+  return ((l-1)+frac)/10*100;
+}
+
+/* ---------- Ticks ---------- */
+const ticks=document.getElementById('ticks');
+for(let i=1;i<=10;i++){const d=document.createElement('div');d.className='tick'+(i===10?' t10':'');d.innerHTML='<span>L'+i+'</span>';ticks.appendChild(d);}
+
+/* ---------- Calisthenics-Dropdowns ---------- */
+for(const id of ['niklas-start','niklas-now']){
+  const sel=document.getElementById(id);
+  const none=document.createElement('option');none.value=0;none.textContent='— noch keiner —';sel.appendChild(none);
+  SKILLS.forEach(([p,n])=>{const o=document.createElement('option');o.value=p;o.textContent=n;sel.appendChild(o);});
+}
+document.getElementById('niklas-start').value=100;
+document.getElementById('niklas-now').value=100;
+
+/* ---------- Athleten ---------- */
+const A=[
+ {id:'fynn',   name:'Fynn',   sport:'100m Sprint',   color:'var(--sprint)',
+   get:(k)=>pointsTime('sprint', parseFloat(document.getElementById('fynn-'+k).value))},
+ {id:'niklas', name:'Niklas', sport:'Calisthenics',  color:'var(--cali)',
+   get:(k)=>parseFloat(document.getElementById('niklas-'+k).value)||0},
+ {id:'alex',   name:'Alex',   sport:'50m Freistil',  color:'var(--swim)',
+   get:(k)=>pointsTime('swim', parseFloat(document.getElementById('alex-'+k).value))}
+];
+
+function render(){
+  const alpha=parseInt(document.getElementById('alpha').value)/100;
+  document.getElementById('alpha-label').textContent=Math.round(alpha*100)+'% Fortschritt';
+  const rows=[];
+  for(const a of A){
+    const ps=a.get('start'), pn=a.get('now');
+    const lv=level(pn), d=pn-ps;
+    document.getElementById(a.id+'-lvl').textContent='L'+lv;
+    document.getElementById(a.id+'-pts').textContent=Math.round(pn);
+    document.getElementById(a.id+'-delta').textContent=(d>=0?'+':'')+Math.round(d);
+    document.getElementById(a.id+'-name').textContent=NAMES[lv-1];
+    // Leiter
+    const row=document.getElementById('row-'+a.id);
+    const x0=pct(ps), x1=pct(pn);
+    row.innerHTML=
+      '<div class="seg" style="left:'+Math.min(x0,x1)+'%;width:'+Math.abs(x1-x0)+'%;background:'+a.color+'"></div>'+
+      '<div class="ghost" style="left:'+x0+'%;color:'+a.color+'"></div>'+
+      '<div class="dot" style="left:'+x1+'%;color:'+a.color+';background:'+a.color+'"></div>'+
+      '<div class="athlabel" style="left:'+x1+'%;color:'+a.color+'">'+a.name.toUpperCase()+' · L'+lv+'</div>';
+    const score=(1-alpha)*pn + alpha*2*d;
+    rows.push({...a, lv, score});
+  }
+  rows.sort((x,y)=>y.score-x.score);
+  document.getElementById('ranking').innerHTML=rows.map((r,i)=>
+    '<tr class="'+(i===0?'first':'')+'"><td class="pos">'+(i+1)+'</td>'+
+    '<td><span class="name" style="color:'+r.color+'">'+r.name+'</span><br><span class="sp">'+r.sport+'</span></td>'+
+    '<td class="mono">L'+r.lv+' · '+NAMES[r.lv-1]+'</td>'+
+    '<td class="score">'+Math.round(r.score)+'</td></tr>').join('');
+}
+
+/* ---------- Level-Zeiten-Tabellen ---------- */
+function timeFor(sport,p){ return WR[sport]/Math.cbrt(p/1000); }
+function fmtT(t){ return t.toFixed(2).replace('.',',')+' s'; }
+function fillTables(){
+  const cur={ sprint:level(A[0].get('now')), swim:level(A[2].get('now')) };
+  for(const sport of ['sprint','swim']){
+    const tb=document.getElementById('tbl-'+sport);
+    let html='<tr'+(cur[sport]===1?' class="hit"':'')+'><td>L1 · '+NAMES[0]+'</td><td>langsamer als '+fmtT(timeFor(sport,BANDS[1]))+'</td><td>&lt;100</td></tr>';
+    for(let i=1;i<10;i++){
+      const hit=cur[sport]===i+1?' class="hit"':'';
+      html+='<tr'+hit+'><td>L'+(i+1)+' · '+NAMES[i]+'</td><td>'+fmtT(timeFor(sport,BANDS[i]))+'</td><td>'+BANDS[i]+(i===9?'+':'')+'</td></tr>';
+    }
+    tb.innerHTML=html;
+  }
+}
+
+/* ---------- Stand teilen ---------- */
+const FIELDS=['fynn-start','fynn-now','niklas-start','niklas-now','alex-start','alex-now','alpha'];
+function makeCode(){
+  return 'MAX1-'+btoa(FIELDS.map(f=>document.getElementById(f).value).join('|'));
+}
+function loadCode(str){
+  try{
+    const s=str.trim();
+    if(!s.startsWith('MAX1-')) throw 0;
+    const vals=atob(s.slice(5)).split('|');
+    if(vals.length!==FIELDS.length) throw 0;
+    FIELDS.forEach((f,i)=>{document.getElementById(f).value=vals[i];});
+    render();
+    return true;
+  }catch(e){ return false; }
+}
+document.getElementById('btn-copy').addEventListener('click',()=>{
+  const code=makeCode(); const msg=document.getElementById('share-msg');
+  const done=()=>{msg.textContent='Kopiert! Einfach in die WhatsApp-Gruppe einfügen: '+code;};
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(code).then(done).catch(()=>{msg.textContent='Code (manuell kopieren): '+code;}); }
+  else{ msg.textContent='Code (manuell kopieren): '+code; }
+});
+document.getElementById('btn-load').addEventListener('click',()=>{
+  const ok=loadCode(document.getElementById('code-in').value);
+  document.getElementById('share-msg').textContent= ok ? 'Stand geladen — alle Werte übernommen.' : 'Code nicht erkannt. Muss mit MAX1- beginnen und vollständig eingefügt sein.';
+});
+
+const _render=render;
+render=function(){ _render(); fillTables(); };
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',render));
+render();
+</script>
+</body>
+</html>
