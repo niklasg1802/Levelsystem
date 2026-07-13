@@ -10,24 +10,26 @@
 :root{
   --bg:#0B0C10; --panel:#14161C; --panel2:#1A1D25; --line:#272B36;
   --txt:#E8EAF0; --dim:#8B90A0; --faint:#565B6B;
-  --swim:#38BDF8; --sprint:#FB923C; --cali:#A78BFA;
+  --swim:#0284C7; --sprint:#EA580C; --cali:#7C3AED;
   --gold:#F5C84B;
 }
 *{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--txt);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;padding-bottom:80px}
 .mono{font-family:'JetBrains Mono',monospace}
 
-header{padding:48px 24px 8px;max-width:1100px;margin:0 auto}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ============ HERO / LANDING ============ */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:56px 0 28px;position:relative}
 .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;color:var(--faint);text-transform:uppercase}
 h1{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(34px,7vw,64px);line-height:1.02;margin:10px 0 6px;letter-spacing:-.01em}
 h1 .l10{color:var(--gold)}
 .sub{color:var(--dim);font-size:15px;max-width:620px;line-height:1.55}
 
-.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
-
 /* ============ SIGNATURE: gemeinsame Leiter ============ */
-.ladder{margin:44px 0 12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px 22px 18px;overflow-x:auto}
-.ladder h2{font-family:'Unbounded';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:22px}
+.ladder{margin:40px 0 12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px 22px 22px;overflow-x:auto}
+.ladder h2{font-family:'Unbounded';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:26px}
 .scale{position:relative;min-width:640px;height:auto}
 .rail{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,#1E2129 0%,#232838 55%,#3A3320 85%,#4A3D18 100%);border:1px solid var(--line)}
 .ticks{display:flex;min-width:640px;margin-top:8px}
@@ -35,20 +37,34 @@ h1 .l10{color:var(--gold)}
 .tick::before{content:"";position:absolute;top:-16px;left:0;width:1px;height:10px;background:var(--line)}
 .tick span{font-family:'JetBrains Mono';font-size:11px;color:var(--faint)}
 .tick.t10 span{color:var(--gold)}
-.athrow{position:relative;min-width:640px;height:46px;margin-top:6px}
-.seg{position:absolute;top:19px;height:8px;border-radius:4px;opacity:.32}
-.dot{position:absolute;top:12px;width:22px;height:22px;border-radius:50%;border:3px solid var(--bg);transform:translateX(-50%);box-shadow:0 0 0 2px currentColor, 0 4px 14px rgba(0,0,0,.5);transition:left .5s cubic-bezier(.2,.8,.2,1)}
-.ghost{position:absolute;top:15px;width:16px;height:16px;border-radius:50%;border:2px dashed currentColor;background:transparent;transform:translateX(-50%);opacity:.55;transition:left .5s}
-.athlabel{position:absolute;top:-2px;transform:translateX(-50%);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.08em;white-space:nowrap;font-weight:600}
-.legend{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap}
+.athrow{position:relative;min-width:640px;height:64px;margin-top:10px}
+.seg{position:absolute;top:27px;height:8px;border-radius:4px;opacity:.32}
+.marker{position:absolute;top:8px;width:38px;height:38px;border-radius:50%;background:var(--panel2);border:2px solid currentColor;transform:translateX(-50%);box-shadow:0 4px 16px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;transition:left .5s cubic-bezier(.2,.8,.2,1);animation:pop .4s cubic-bezier(.2,.8,.2,1)}
+.marker svg{width:22px;height:22px;color:currentColor}
+.ghost{position:absolute;top:31px;width:16px;height:16px;border-radius:50%;border:2px dashed currentColor;background:transparent;transform:translateX(-50%);opacity:.55;transition:left .5s}
+.athlabel{position:absolute;top:-4px;transform:translateX(-50%);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.08em;white-space:nowrap;font-weight:600}
+@keyframes pop{from{transform:translateX(-50%) scale(.4);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+.legend{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap}
 .legend div{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:7px}
+.legend svg{width:14px;height:14px}
 .swatch{width:10px;height:10px;border-radius:50%}
+
+.scrollcue{display:flex;align-items:center;gap:8px;justify-content:center;margin:34px auto 0;color:var(--dim);font-family:'JetBrains Mono';font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:color .15s}
+.scrollcue:hover{color:var(--gold)}
+.scrollcue svg{width:16px;height:16px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* ============ Update-Bereich ============ */
+.update-head{margin:64px 0 8px}
+.update-head h2{font-family:'Unbounded';font-weight:800;font-size:clamp(22px,3.5vw,30px)}
+.update-head p{color:var(--dim);font-size:14px;margin-top:8px;max-width:600px;line-height:1.55}
 
 /* ============ Athleten-Karten ============ */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:26px 0}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;overflow:hidden}
 .card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--ac)}
-.card h3{font-family:'Unbounded';font-size:17px;font-weight:700}
+.card h3{font-family:'Unbounded';font-size:17px;font-weight:700;display:flex;align-items:center;gap:9px}
+.card h3 svg{width:20px;height:20px;color:var(--ac)}
 .card .sport{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ac);margin:3px 0 18px}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:12px;color:var(--dim);margin-bottom:6px}
@@ -75,7 +91,7 @@ tr:last-child td{border-bottom:none}
 td.pos{font-family:'Unbounded';font-weight:900;font-size:18px;width:44px}
 tr.first td.pos{color:var(--gold)}
 td .name{font-weight:600}
-td .sp{font-size:11px;color:var(--dim);font-family:'JetBrains Mono')}
+td .sp{font-size:11px;color:var(--dim);font-family:'JetBrains Mono'}
 td.score{font-family:'JetBrains Mono';font-weight:600;font-size:16px;text-align:right}
 .hint{font-size:12px;color:var(--faint);margin-top:14px;line-height:1.6}
 
@@ -93,49 +109,54 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
 
 .sharebox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:16px}
 .sharebox h2{font-family:'Unbounded';font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
-.share-row{display:flex;gap:10px;flex-wrap:wrap}
-.share-row input{flex:1;min-width:200px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--txt);font-family:'JetBrains Mono';font-size:12px;outline:none}
-.btn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 18px;color:var(--txt);font-family:'Space Grotesk';font-size:13px;font-weight:600;cursor:pointer;transition:border-color .15s}
-.btn:hover,.btn:focus-visible{border-color:var(--gold)}
-.btn.primary{border-color:var(--gold);color:var(--gold)}
 
-@media(max-width:600px){header{padding-top:32px}.readout{flex-wrap:wrap}.stat{min-width:44%}.lvl-tables{grid-template-columns:1fr}}
-@media (prefers-reduced-motion: reduce){.dot,.ghost{transition:none}}
+.backtop{display:inline-flex;align-items:center;gap:6px;margin-top:24px;color:var(--dim);font-family:'JetBrains Mono';font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
+.backtop:hover{color:var(--gold)}
+
+@media(max-width:600px){.hero{padding-top:40px}.readout{flex-wrap:wrap}.stat{min-width:44%}.lvl-tables{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.marker,.ghost{transition:none;animation:none}.scrollcue svg{animation:none}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="eyebrow">6 Monate · Ein Ziel · Drei Disziplinen</div>
-  <h1>MAXIMUM <span class="l10">/ L10</span></h1>
-  <p class="sub">Jede Leistung wird über die World-Record-Punkteformel auf eine gemeinsame Skala von Level 1 (Anfänger) bis Level 10 (Weltklasse) übersetzt. Egal wo du startest — es zählt, wo du am Ende stehst.</p>
-</header>
+<!-- ============ LANDING / HERO ============ -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">6 Monate · Ein Ziel · Drei Disziplinen</div>
+    <h1>MAXIMUM <span class="l10">/ L10</span></h1>
+    <p class="sub">Jede Leistung wird über die World-Record-Punkteformel auf eine gemeinsame Skala von Level 1 (Anfänger) bis Level 10 (Weltklasse) übersetzt. Egal wo du startest — es zählt, wo du am Ende stehst.</p>
 
-<div class="wrap">
+    <section class="ladder">
+      <h2>Die gemeinsame Skala</h2>
+      <div class="scale">
+        <div class="rail"></div>
+        <div class="ticks" id="ticks"></div>
+        <div class="athrow" id="row-fynn"></div>
+        <div class="athrow" id="row-niklas"></div>
+        <div class="athrow" id="row-alex"></div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </section>
 
-  <!-- Gemeinsame Leiter -->
-  <section class="ladder">
-    <h2>Die gemeinsame Skala</h2>
-    <div class="scale">
-      <div class="rail"></div>
-      <div class="ticks" id="ticks"></div>
-      <div class="athrow" id="row-fynn"></div>
-      <div class="athrow" id="row-niklas"></div>
-      <div class="athrow" id="row-alex"></div>
-    </div>
-    <div class="legend">
-      <div><span class="swatch" style="background:var(--sprint)"></span>Fynn · 100m Sprint</div>
-      <div><span class="swatch" style="background:var(--cali)"></span>Niklas · Calisthenics</div>
-      <div><span class="swatch" style="background:var(--swim)"></span>Alex · 50m Freistil</div>
-      <div><span class="swatch" style="border:2px dashed var(--faint);background:transparent"></span>gestrichelt = Startpunkt</div>
-    </div>
+    <a class="scrollcue" href="#update">
+      <span>Werte aktualisieren</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></svg>
+    </a>
+  </div>
+</section>
+
+<div class="wrap" id="update">
+
+  <section class="update-head">
+    <h2>Werte aktualisieren</h2>
+    <p>Trag hier deine Startzeit/-skill und deinen aktuellen Stand ein. Jede Änderung wird automatisch gespeichert und erscheint live in der Skala oben — bei dir und bei allen anderen.</p>
   </section>
 
   <!-- Eingabe-Karten -->
   <section class="cards">
 
     <div class="card" style="--ac:var(--sprint)">
-      <h3>Fynn</h3>
+      <h3 id="icon-fynn-slot">Fynn</h3>
       <div class="sport">100m Sprint · WR 9,58s</div>
       <div class="field"><label>Startzeit (Baseline, Sekunden)</label>
         <input type="number" step="0.01" id="fynn-start" value="15.00"></div>
@@ -150,7 +171,7 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
     </div>
 
     <div class="card" style="--ac:var(--cali)">
-      <h3>Niklas</h3>
+      <h3 id="icon-niklas-slot">Niklas</h3>
       <div class="sport">Calisthenics · Skill-Leiter</div>
       <div class="field"><label>Start-Skill (höchster sauberer Skill)</label>
         <select id="niklas-start"></select></div>
@@ -165,7 +186,7 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
     </div>
 
     <div class="card" style="--ac:var(--swim)">
-      <h3>Alex</h3>
+      <h3 id="icon-alex-slot">Alex</h3>
       <div class="sport">50m Freistil · WR 20,91s</div>
       <div class="field"><label>Startzeit (Baseline, Sekunden)</label>
         <input type="number" step="0.01" id="alex-start" value="34.00"></div>
@@ -226,9 +247,26 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
     <p>Regeln für Fairness: Baseline-Test in Woche 1 unter Zeugen; identische Messbedingungen bei Start- und Endtest (Handstoppung nicht mit elektronischer Zeit mischen, gleiche Bahn, gleiches Becken); Videobeweis für jeden Calisthenics-Skill in sauberer Ausführung.</p>
   </details>
 
+  <a class="backtop" href="#top">↑ Zur Skala</a>
+
 </div>
 
 <script>
+/* ---------- Icons (Pictogramme je Disziplin) ---------- */
+const ICONS={
+  fynn:'<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="4" r="2" fill="currentColor"/><path d="M13 7 L10 11 L13 13 L11 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11 L6 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M13 13 L17 15 L19 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 20 L8 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M13 13 L16 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  niklas:'<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="4" x2="20" y2="4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="8" r="2" fill="currentColor"/><path d="M9 4 L10 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M15 4 L14 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 10 L12 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 13 L9 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 13 L15 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 15 L9 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 15 L15 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  alex:'<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="9" r="2" fill="currentColor"/><path d="M6 10 L12 12 L20 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12 L15 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 11 L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M2 18 Q6 16 10 18 T18 18 T22 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>'
+};
+document.getElementById('icon-fynn-slot').innerHTML=ICONS.fynn+'Fynn';
+document.getElementById('icon-niklas-slot').innerHTML=ICONS.niklas+'Niklas';
+document.getElementById('icon-alex-slot').innerHTML=ICONS.alex+'Alex';
+document.getElementById('legend').innerHTML=
+  '<div style="color:var(--sprint)">'+ICONS.fynn+'Fynn · 100m Sprint</div>'+
+  '<div style="color:var(--cali)">'+ICONS.niklas+'Niklas · Calisthenics</div>'+
+  '<div style="color:var(--swim)">'+ICONS.alex+'Alex · 50m Freistil</div>'+
+  '<div><span class="swatch" style="border:2px dashed var(--faint);background:transparent"></span>gestrichelt = Startpunkt</div>';
+
 /* ---------- Skala ---------- */
 const BANDS=[0,100,175,250,330,420,520,640,780,900]; // Untergrenzen L1..L10
 const NAMES=["Rookie","Einsteiger","Fortgeschritten","Solide","Athlet","Wettkämpfer","Vereinsspitze","Landesniveau","National","Weltklasse"];
@@ -299,7 +337,7 @@ function render(){
     row.innerHTML=
       '<div class="seg" style="left:'+Math.min(x0,x1)+'%;width:'+Math.abs(x1-x0)+'%;background:'+a.color+'"></div>'+
       '<div class="ghost" style="left:'+x0+'%;color:'+a.color+'"></div>'+
-      '<div class="dot" style="left:'+x1+'%;color:'+a.color+';background:'+a.color+'"></div>'+
+      '<div class="marker" style="left:'+x1+'%;color:'+a.color+'">'+ICONS[a.id]+'</div>'+
       '<div class="athlabel" style="left:'+x1+'%;color:'+a.color+'">'+a.name.toUpperCase()+' · L'+lv+'</div>';
     const score=(1-alpha)*pn + alpha*2*d;
     rows.push({...a, lv, score});
