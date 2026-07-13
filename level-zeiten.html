@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level-Zeiten — MAXIMUM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C10; --panel:#14161C; --panel2:#1A1D25; --line:#272B36;
+  --txt:#E8EAF0; --dim:#8B90A0; --faint:#565B6B;
+  --swim:#0284C7; --sprint:#EA580C; --cali:#7C3AED;
+  --gold:#F5C84B;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;padding:48px 24px 80px}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:1100px;margin:0 auto}
+
+.page-head h1{font-family:'Unbounded';font-weight:800;font-size:clamp(24px,4vw,34px)}
+.page-head p{color:var(--dim);font-size:14px;margin-top:8px;max-width:600px;line-height:1.55}
+.wip{display:inline-block;margin-top:14px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);background:var(--panel2);padding:5px 10px;border-radius:20px}
+
+.rankbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:26px}
+.rankbox h2{font-family:'Unbounded';font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+table{width:100%;border-collapse:collapse}
+th{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:none}
+.hint{font-size:12px;color:var(--faint);margin-top:14px;line-height:1.6}
+
+.lvl-tables{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:18px}
+.lvl-tables td{padding:8px 10px;font-family:'JetBrains Mono';font-size:13px;border-bottom:1px solid var(--line)}
+.lvl-tables td:first-child{font-weight:600}
+.lvl-tables tr.hit td{color:var(--gold)}
+.lvl-tables td:last-child{text-align:right;color:var(--faint)}
+
+.backtop{display:inline-flex;align-items:center;gap:6px;margin-top:28px;color:var(--dim);font-family:'JetBrains Mono';font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
+.backtop:hover{color:var(--gold)}
+
+@media(max-width:600px){.lvl-tables{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Level-Zeiten</h1>
+    <p>Welche Zeit bringt welches Level — Schwelle ist jeweils die Zeit: schneller oder gleich heißt Level erreicht. L1 gilt für alles darüber. Die aktuell erreichte Zeile ist markiert.</p>
+    <span class="wip">🚧 Diese Seite ist noch in Arbeit</span>
+  </div>
+
+  <section class="rankbox">
+    <h2>Level-Zeiten je Disziplin</h2>
+    <div class="lvl-tables">
+      <table>
+        <thead><tr><th style="color:var(--sprint)">100m Sprint</th><th>ab Zeit</th><th style="text-align:right">Punkte</th></tr></thead>
+        <tbody id="tbl-sprint"></tbody>
+      </table>
+      <table>
+        <thead><tr><th style="color:var(--swim)">50m Freistil</th><th>ab Zeit</th><th style="text-align:right">Punkte</th></tr></thead>
+        <tbody id="tbl-swim"></tbody>
+      </table>
+    </div>
+    <p class="hint" id="status-msg">Lade aktuellen Stand …</p>
+  </section>
+
+  <a class="backtop" href="index.html">← Zurück zur Skala</a>
+</div>
+
+<script>
+const BANDS=[0,100,175,250,330,420,520,640,780,900];
+const NAMES=["Rookie","Einsteiger","Fortgeschritten","Solide","Athlet","Wettkämpfer","Vereinsspitze","Landesniveau","National","Weltklasse"];
+const PMAX=1000;
+const WR={sprint:9.58, swim:20.91};
+
+function pointsTime(sport,t){ if(!t||t<=0) return 0; return Math.min(PMAX, 1000*Math.pow(WR[sport]/t,3)); }
+function level(p){ let l=1; for(let i=0;i<BANDS.length;i++){ if(p>=BANDS[i]) l=i+1; } return l; }
+function timeFor(sport,p){ return WR[sport]/Math.cbrt(p/1000); }
+function fmtT(t){ return t.toFixed(2).replace('.',',')+' s'; }
+
+function fillTables(cur){
+  for(const sport of ['sprint','swim']){
+    const tb=document.getElementById('tbl-'+sport);
+    let html='<tr'+(cur[sport]===1?' class="hit"':'')+'><td>L1 · '+NAMES[0]+'</td><td>langsamer als '+fmtT(timeFor(sport,BANDS[1]))+'</td><td>&lt;100</td></tr>';
+    for(let i=1;i<10;i++){
+      const hit=cur[sport]===i+1?' class="hit"':'';
+      html+='<tr'+hit+'><td>L'+(i+1)+' · '+NAMES[i]+'</td><td>'+fmtT(timeFor(sport,BANDS[i]))+'</td><td>'+BANDS[i]+(i===9?'+':'')+'</td></tr>';
+    }
+    tb.innerHTML=html;
+  }
+}
+
+async function load(){
+  const statusMsg=document.getElementById('status-msg');
+  try{
+    const res=await fetch('/api/state');
+    const state=await res.json();
+    const cur={
+      sprint: level(pointsTime('sprint', parseFloat(state['fynn-now']))),
+      swim: level(pointsTime('swim', parseFloat(state['alex-now'])))
+    };
+    fillTables(cur);
+    statusMsg.textContent='Markiert: aktueller Stand von Fynn (Sprint) und Alex (Freistil).';
+  }catch(e){
+    fillTables({sprint:0,swim:0});
+    statusMsg.textContent='Aktueller Stand konnte nicht geladen werden — Tabelle ohne Markierung.';
+  }
+}
+load();
+</script>
+</body>
+</html>
