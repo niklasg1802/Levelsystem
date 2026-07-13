@@ -5,123 +5,165 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MAXIMUM — 6-Monats-Challenge Levelsystem</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0B0C10; --panel:#14161C; --panel2:#1A1D25; --line:#272B36;
-  --txt:#E8EAF0; --dim:#8B90A0; --faint:#565B6B;
-  --swim:#0284C7; --sprint:#EA580C; --cali:#7C3AED;
-  --gold:#F5C84B;
+  --plum:#301B28; --brown:#523634; --rust:#B6452C; --sand:#DDC5A2;
+  --sand-dim:rgba(221,197,162,.58); --sand-faint:rgba(221,197,162,.28);
+  --ink:#301B28; --ink-dim:rgba(48,27,40,.64); --ink-faint:rgba(48,27,40,.4);
+  --line:rgba(48,27,40,.18); --line-dark:rgba(221,197,162,.16);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--txt);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;padding-bottom:80px}
-.mono{font-family:'JetBrains Mono',monospace}
+body{background:var(--sand);color:var(--ink);font-family:'Instrument Sans',system-ui,sans-serif;min-height:100vh}
 
-.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+.wrap{max-width:1060px;margin:0 auto;padding:0 28px}
 
-/* ============ HERO / LANDING — frei, ohne Box ============ */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px 0;position:relative}
-.scale{position:relative;width:min(1300px,92vw);height:auto;overflow-x:auto}
-.rail{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,#1E2129 0%,#232838 55%,#3A3320 85%,#4A3D18 100%);min-width:640px}
-.ticks{position:relative;min-width:640px;height:20px;margin-top:8px}
+/* ============ HERO — dunkel, freie Skala ============ */
+.hero{min-height:100vh;background:var(--plum);color:var(--sand);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:56px 0 0;position:relative}
+.kicker{font-size:11px;letter-spacing:.38em;text-transform:uppercase;color:var(--sand-dim);margin-bottom:64px}
+
+.scale{position:relative;width:min(1300px,92vw);height:auto;overflow-x:auto;padding:0 56px}
+@media(max-width:720px){.scale{padding:0 44px}}
+.rail{position:relative;height:2px;background:linear-gradient(90deg,rgba(221,197,162,.1),rgba(221,197,162,.28) 65%,rgba(182,69,44,.9));min-width:640px}
+.ticks{position:relative;min-width:640px;height:24px;margin-top:10px}
 .tick{position:absolute;transform:translateX(-100%);white-space:nowrap}
-.tick::before{content:"";position:absolute;top:-22px;right:0;width:1px;height:10px;background:var(--line)}
-.tick span{font-family:'JetBrains Mono';font-size:11px;color:var(--faint)}
-.tick.t10 span{color:var(--gold)}
-.athrow{position:relative;min-width:640px;height:78px;margin-top:14px}
-.seg{position:absolute;top:33px;height:6px;border-radius:3px;opacity:.28}
-.marker{position:absolute;top:2px;width:50px;height:50px;border-radius:50%;background:var(--panel2);border:2px solid currentColor;transform:translateX(-50%);box-shadow:0 6px 20px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;transition:left .6s cubic-bezier(.2,.8,.2,1);animation:pop .4s cubic-bezier(.2,.8,.2,1)}
+.tick::before{content:"";position:absolute;top:-26px;right:0;width:1px;height:12px;background:var(--line-dark)}
+.tick span{font-family:'Fraunces',serif;font-style:italic;font-size:13px;color:var(--sand-dim)}
+.tick.t10 span{color:var(--rust);font-weight:600}
+.athrow{position:relative;min-width:640px;height:78px;margin-top:14px;transition:opacity .5s}
+.athrow.pending{opacity:0}
+.seg{position:absolute;top:33px;height:4px;border-radius:2px;background:var(--rust);opacity:.3}
+.marker{position:absolute;top:2px;width:50px;height:50px;border-radius:50%;background:#3B2231;border:1.5px solid var(--rust);color:var(--sand);transform:translateX(-50%);box-shadow:0 8px 26px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;transition:left .6s cubic-bezier(.2,.8,.2,1)}
 .marker svg{width:30px;height:30px;color:currentColor;overflow:visible}
-.ghost{position:absolute;top:27px;width:16px;height:16px;border-radius:50%;border:2px dashed currentColor;background:transparent;transform:translateX(-50%);opacity:.5;transition:left .6s}
-.athlabel{position:absolute;top:-4px;transform:translateX(-50%);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.08em;white-space:nowrap;font-weight:600}
-@keyframes pop{from{transform:translateX(-50%) scale(.4);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+.athlabel{position:absolute;top:-6px;transform:translateX(-50%);font-size:10px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;font-weight:600;color:var(--sand);transition:left .6s cubic-bezier(.2,.8,.2,1)}
 
-/* Lauf-Animation (Fynn) */
-.rm-arm-f,.rm-arm-b{transform-origin:12px 8px;animation:runArm .55s ease-in-out infinite}
-.rm-leg-f,.rm-leg-b{transform-origin:12px 15px;animation:runLeg .55s ease-in-out infinite}
-.rm-arm-b,.rm-leg-f{animation-delay:-.275s}
-@keyframes runArm{0%,100%{transform:rotate(28deg)}50%{transform:rotate(-28deg)}}
-@keyframes runLeg{0%,100%{transform:rotate(-32deg)}50%{transform:rotate(32deg)}}
-.icon-run{animation:bounceY .55s ease-in-out infinite}
-@keyframes bounceY{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
+/* Lauf-Zyklus (Fynn) — läuft nach rechts */
+.rn-arm-f{transform-origin:15.6px 8.6px;animation:runSwingA .5s ease-in-out infinite}
+.rn-arm-b{transform-origin:15.6px 8.6px;animation:runSwingB .5s ease-in-out infinite}
+.rn-leg-f{transform-origin:13.6px 16px;animation:runSwingB .5s ease-in-out infinite}
+.rn-leg-b{transform-origin:13.6px 16px;animation:runSwingA .5s ease-in-out infinite}
+@keyframes runSwingA{0%,100%{transform:rotate(32deg)}50%{transform:rotate(-34deg)}}
+@keyframes runSwingB{0%,100%{transform:rotate(-34deg)}50%{transform:rotate(32deg)}}
+.icon-run{animation:runBounce .25s ease-in-out infinite}
+@keyframes runBounce{0%,100%{transform:translateY(.4px)}50%{transform:translateY(-1.2px)}}
 
-/* Schwimm-Animation (Alex) */
-.sm-arm{transform-origin:7px 8px;animation:swimArm .9s linear infinite}
-.sm-leg-f{transform-origin:19px 10px;animation:swimLeg .35s ease-in-out infinite}
-.sm-leg-b{transform-origin:19px 10px;animation:swimLeg .35s ease-in-out infinite reverse}
-@keyframes swimArm{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes swimLeg{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(18deg)}}
-.icon-swim{animation:bobY 1.2s ease-in-out infinite}
-@keyframes bobY{0%,100%{transform:translateY(0)}50%{transform:translateY(1.5px)}}
+/* Schwimm-Zyklus (Alex) — kraul nach rechts, im Wasser */
+.sw-arm{transform-origin:23.8px 11px;animation:swArm .9s linear infinite}
+@keyframes swArm{to{transform:rotate(360deg)}}
+.sw-leg-a{transform-origin:13.8px 12.4px;animation:swKickA .28s ease-in-out infinite}
+.sw-leg-b{transform-origin:13.8px 12.4px;animation:swKickB .28s ease-in-out infinite}
+@keyframes swKickA{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(14deg)}}
+@keyframes swKickB{0%,100%{transform:rotate(14deg)}50%{transform:rotate(-12deg)}}
+.sw-body{animation:swBob 1.1s ease-in-out infinite}
+@keyframes swBob{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}
+
+/* Handstand-Lauf (Niklas unterwegs): Aufschwung -> Gehen auf den Händen -> Abgang */
+.hs-flip{transform-origin:14px 14px;animation:hsFlip .55s ease-in-out forwards}
+@keyframes hsFlip{from{transform:rotate(0deg)}to{transform:rotate(180deg)}}
+.hs-flip-down{transform-origin:14px 14px;animation:hsFlipDown .55s ease-in-out forwards}
+@keyframes hsFlipDown{from{transform:rotate(180deg)}to{transform:rotate(360deg)}}
+.hw-arm-a{transform-origin:14px 17.6px;animation:hwStepA .5s ease-in-out infinite}
+.hw-arm-b{transform-origin:14px 17.6px;animation:hwStepB .5s ease-in-out infinite}
+@keyframes hwStepA{0%,100%{transform:rotate(7deg)}50%{transform:rotate(-7deg)}}
+@keyframes hwStepB{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+.hw-leg-a{transform-origin:14px 9.6px;animation:hwLegA 1.1s ease-in-out infinite}
+.hw-leg-b{transform-origin:14px 9.6px;animation:hwLegB 1.1s ease-in-out infinite}
+@keyframes hwLegA{0%,100%{transform:rotate(9deg)}50%{transform:rotate(-5deg)}}
+@keyframes hwLegB{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+.icon-hw{animation:hwSway .5s ease-in-out infinite}
+@keyframes hwSway{0%,100%{transform:translateY(0)}50%{transform:translateY(-.8px)}}
 
 /* Flex-Animation (Niklas, wird je nach Level muskulöser) */
 .icon-flex{transform-box:fill-box;transform-origin:center;animation:flexPulse 1.8s ease-in-out infinite}
 @keyframes flexPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 
-.legend{display:flex;gap:20px;margin-top:28px;flex-wrap:wrap;justify-content:center}
-.legend div{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:7px}
-.legend svg{width:16px;height:16px;overflow:visible}
+.legend{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap;justify-content:center}
+.legend div{font-size:12px;color:var(--sand-dim);display:flex;align-items:center;gap:8px}
+.legend svg{width:16px;height:16px;overflow:visible;color:var(--rust)}
 .swatch{width:10px;height:10px;border-radius:50%}
 
-.scrollcue{display:flex;align-items:center;gap:8px;justify-content:center;margin:40px auto 0;color:var(--dim);font-family:'JetBrains Mono';font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:color .15s}
-.scrollcue:hover{color:var(--gold)}
-.scrollcue svg{width:16px;height:16px;animation:bob 1.6s ease-in-out infinite}
+.scrollcue{display:flex;align-items:center;gap:9px;justify-content:center;margin:56px auto 0;color:var(--sand-dim);font-size:11px;letter-spacing:.28em;text-transform:uppercase;text-decoration:none;transition:color .2s}
+.scrollcue:hover{color:var(--sand)}
+.scrollcue svg{width:15px;height:15px;animation:bob 1.6s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 
-/* ============ Update-Bereich ============ */
-.update-head{margin:64px 0 8px}
-.update-head h2{font-family:'Unbounded';font-weight:800;font-size:clamp(22px,3.5vw,30px)}
-.update-head p{color:var(--dim);font-size:14px;margin-top:8px;max-width:600px;line-height:1.55}
+/* fließender Übergang dunkel → hell */
+.blend{height:200px;background:linear-gradient(180deg,#301B28 0%,#523634 42%,#8A6752 72%,#DDC5A2 100%)}
 
-/* ============ Athleten-Karten ============ */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:26px 0}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;overflow:hidden}
-.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--ac)}
-.card h3{font-family:'Unbounded';font-size:17px;font-weight:700;display:flex;align-items:center;gap:9px}
-.card h3 svg{width:22px;height:22px;color:var(--ac);overflow:visible}
-.card .sport{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ac);margin:3px 0 18px}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:12px;color:var(--dim);margin-bottom:6px}
-.field input,.field select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--txt);font-family:'JetBrains Mono';font-size:15px;outline:none;transition:border-color .15s}
-.field input:focus,.field select:focus{border-color:var(--ac)}
+/* ============ Update-Bereich — hell, offen, eine Bildschirmseite ============ */
+.light{padding:0 0 96px}
+.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:40px 0 16px}
+.update-head{margin-bottom:4px}
+.update-head h2{font-family:'Fraunces',serif;font-weight:550;font-size:clamp(28px,4.5vh,42px);letter-spacing:-.01em}
+.update-head p{color:var(--ink-dim);font-size:14px;margin-top:8px;max-width:640px;line-height:1.55}
+.sync{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-top:10px;min-height:13px}
+
+.ath{padding:clamp(10px,2.4vh,28px) 0}
+.ath-head{display:flex;align-items:baseline;gap:20px}
+.ath-head h3{font-family:'Fraunces',serif;font-size:clamp(24px,3.6vh,34px);font-weight:600;display:flex;align-items:center;gap:14px;letter-spacing:-.01em}
+.ath-head h3 svg{width:26px;height:26px;color:var(--rust);overflow:visible;flex:none}
+.ath-head .rule{flex:1;height:1px;background:var(--line);align-self:center}
+.ath-head .sport{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-dim);white-space:nowrap}
+
+.ath-grid{display:flex;gap:48px;align-items:flex-end;margin-top:18px;flex-wrap:wrap}
+.stat .big{font-family:'Fraunces',serif;font-size:clamp(30px,4.4vh,42px);font-weight:500;color:var(--rust);line-height:1;letter-spacing:-.01em}
+.stat.delta .big{color:var(--ink)}
+.stat .big.goal{font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:500;color:var(--ink);line-height:1.45;max-width:270px;min-height:40px;display:flex;align-items:flex-end}
+.stat .lbl{font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.2em;margin-top:8px}
+
+.entry{margin-left:auto;min-width:250px;max-width:320px;flex:1}
+.field{margin-bottom:16px;position:relative}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px}
+.field input,.field select{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);border-radius:0;padding:7px 2px;color:var(--ink);outline:none;transition:border-color .2s}
+.field input{font-family:'Fraunces',serif;font-size:26px;font-weight:500}
+.field input:focus,.field select:focus{border-bottom-color:var(--rust)}
+/* native Spinner aus — eigene Pfeile im Look der Seite */
+.field input[type=number]::-webkit-outer-spin-button,.field input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.field input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.step{position:absolute;right:0;bottom:9px;display:flex;flex-direction:column;gap:1px;opacity:0;transition:opacity .25s}
+.field:hover .step,.field:focus-within .step{opacity:1}
+.step button{all:unset;cursor:pointer;width:24px;height:14px;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);transition:color .15s}
+.step button:hover{color:var(--rust)}
+.step svg{width:12px;height:12px}
+/* Dropdown (Niklas) im gleichen Look */
+.field select{font-family:'Instrument Sans',sans-serif;font-size:15px;cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23B6452C' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:12px}
+.field select option{background:var(--sand);color:var(--ink)}
 .field.stage{display:none}
 .field.stage.show{display:block}
-.readout{display:flex;gap:10px;margin-top:16px}
-.stat{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;text-align:center}
-.stat .big{font-family:'Unbounded';font-size:24px;font-weight:900;color:var(--ac);line-height:1}
-.stat .big.goal{font-family:'JetBrains Mono';font-size:12px;font-weight:600;color:var(--txt);line-height:1.35;padding-top:5px;min-height:32px;display:flex;align-items:center;justify-content:center}
-.stat .lbl{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;margin-top:6px;font-family:'JetBrains Mono'}
-.stat.delta .big{color:var(--txt);font-size:20px}
-.lvlname{margin-top:12px;font-size:13px;color:var(--dim);text-align:center;min-height:18px}
 
-.hint{font-size:12px;color:var(--faint);margin-top:14px;line-height:1.6}
+.lvlname{margin-top:12px;font-family:'Fraunces',serif;font-style:italic;font-size:14px;color:var(--ink-dim);min-height:17px}
 
-/* ============ Formel / Regeln ============ */
-details{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
-summary{cursor:pointer;font-size:13px;color:var(--dim);font-weight:600}
-details p{font-size:13px;color:var(--dim);line-height:1.7;margin-top:12px}
-details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);background:var(--panel2);padding:2px 6px;border-radius:5px}
+/* ============ Level-Übersicht Link ============ */
+.overview-link{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:40px 0;margin-top:0;font-family:'Fraunces',serif;font-size:clamp(24px,3.6vw,36px);font-weight:550;color:var(--ink);text-decoration:none;letter-spacing:-.01em;transition:color .2s}
+.overview-link small{display:block;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:400;color:var(--ink-dim);letter-spacing:0;margin-top:8px}
+.overview-link .arrow{font-family:'Fraunces',serif;font-size:1.1em;transition:transform .25s}
+.overview-link:hover{color:var(--rust)}
+.overview-link:hover .arrow{transform:translateX(8px)}
 
-.sharebox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:16px}
-.sharebox h2{font-family:'Unbounded';font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.backtop{display:inline-flex;align-items:center;gap:8px;margin-top:44px;color:var(--ink-faint);font-size:11px;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;transition:color .2s}
+.backtop:hover{color:var(--rust)}
 
-.backtop{display:inline-flex;align-items:center;gap:6px;margin-top:24px;color:var(--dim);font-family:'JetBrains Mono';font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
-.backtop:hover{color:var(--gold)}
-
-@media(max-width:600px){.readout{flex-wrap:wrap}.stat{min-width:44%}}
+@media(max-width:680px){
+  .ath-grid{gap:28px}
+  .entry{margin-left:0;min-width:100%}
+  .ath-head .sport{display:none}
+}
 @media (prefers-reduced-motion: reduce){
-  .marker,.ghost{transition:none;animation:none}
+  .marker,.athlabel{transition:none;animation:none}
   .scrollcue svg{animation:none}
-  .rm-arm-f,.rm-arm-b,.rm-leg-f,.rm-leg-b,.icon-run,.sm-arm,.sm-leg-f,.sm-leg-b,.icon-swim,.icon-flex{animation:none}
+  .rn-arm-f,.rn-arm-b,.rn-leg-f,.rn-leg-b,.icon-run,.sw-arm,.sw-leg-a,.sw-leg-b,.sw-body,.icon-flex{animation:none}
+  .hs-flip,.hs-flip-down,.hw-arm-a,.hw-arm-b,.hw-leg-a,.hw-leg-b,.icon-hw{animation:none}
   html{scroll-behavior:auto}
 }
 </style>
 </head>
 <body>
 
-<!-- ============ LANDING / HERO — frei, ohne Box, ohne Titeltext ============ -->
+<!-- ============ HERO — freie Skala auf Plum ============ -->
 <section class="hero" id="top">
+  <p class="kicker">Sechs Monate · Drei Disziplinen</p>
   <div class="scale">
     <div class="rail"></div>
     <div class="ticks" id="ticks"></div>
@@ -137,126 +179,157 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
   </a>
 </section>
 
-<div class="wrap" id="update">
+<div class="blend"></div>
 
-  <section class="update-head">
+<main class="light" id="update">
+<div class="wrap">
+<div class="screen">
+
+  <header class="update-head">
     <h2>Werte aktualisieren</h2>
-    <p>Trag hier deinen aktuellen Stand ein. Die Baseline aus Woche 1 ist fix und fließt weiter in den Zuwachs ein. Jede Änderung wird automatisch gespeichert und erscheint live in der Skala oben — bei dir und bei allen anderen.</p>
-  </section>
+    <p>Trag deinen aktuellen Stand ein. Gestartet sind alle auf Level 1 — jede Änderung wird automatisch gespeichert und erscheint oben in der Skala, bei dir und bei allen anderen.</p>
+    <p class="sync" id="sync-msg"></p>
+  </header>
 
-  <!-- Eingabe-Karten -->
-  <section class="cards">
+  <!-- Athleten — offene Zeilen -->
+  <section class="athletes">
 
-    <div class="card" style="--ac:var(--sprint)">
-      <h3 id="icon-fynn-slot">Fynn</h3>
-      <div class="sport">100m Sprint · L10 = 11,0s</div>
-      <input type="hidden" id="fynn-start" value="15.00">
-      <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
-        <input type="number" step="0.01" id="fynn-now" value="15.00"></div>
-      <div class="readout">
+    <article class="ath">
+      <div class="ath-head">
+        <h3 id="icon-fynn-slot">Fynn</h3>
+        <div class="rule"></div>
+        <span class="sport">100m Sprint · L10 = 11,0s</span>
+      </div>
+      <input type="hidden" id="fynn-start" value="14.00">
+      <div class="ath-grid">
         <div class="stat"><div class="big" id="fynn-lvl">–</div><div class="lbl">Level</div></div>
         <div class="stat delta"><div class="big" id="fynn-delta">–</div><div class="lbl">Zuwachs</div></div>
         <div class="stat"><div class="big goal" id="fynn-next">–</div><div class="lbl">Nächstes Level</div></div>
+        <div class="entry">
+          <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
+            <input type="number" step="0.01" id="fynn-now" value="15.00"></div>
+        </div>
       </div>
-      <div class="lvlname" id="fynn-name"></div>
-    </div>
+      <p class="lvlname" id="fynn-name"></p>
+    </article>
 
-    <div class="card" style="--ac:var(--cali)">
-      <h3 id="icon-niklas-slot">Niklas</h3>
-      <div class="sport">Calisthenics · L10 = Full Planche</div>
-      <input type="hidden" id="niklas-start" value="0">
+    <article class="ath">
+      <div class="ath-head">
+        <h3 id="icon-niklas-slot">Niklas</h3>
+        <div class="rule"></div>
+        <span class="sport">Calisthenics · L10 = Full Planche</span>
+      </div>
+      <input type="hidden" id="niklas-start" value="1">
       <input type="hidden" id="niklas-now" value="0">
-      <div class="field"><label>Aktueller Benchmark</label>
-        <select id="niklas-now-level"></select></div>
-      <div class="field stage" id="niklas-stage-field"><label>Fortschritt in diesem Level</label>
-        <select id="niklas-now-stage"></select></div>
-      <div class="readout">
+      <div class="ath-grid">
         <div class="stat"><div class="big" id="niklas-lvl">–</div><div class="lbl">Level</div></div>
         <div class="stat delta"><div class="big" id="niklas-delta">–</div><div class="lbl">Zuwachs</div></div>
         <div class="stat"><div class="big goal" id="niklas-next">–</div><div class="lbl">Nächstes Level</div></div>
+        <div class="entry">
+          <div class="field"><label>Aktueller Benchmark</label>
+            <select id="niklas-now-level"></select></div>
+          <div class="field stage" id="niklas-stage-field"><label>Fortschritt in diesem Level</label>
+            <select id="niklas-now-stage"></select></div>
+        </div>
       </div>
-      <div class="lvlname" id="niklas-name"></div>
-    </div>
+      <p class="lvlname" id="niklas-name"></p>
+    </article>
 
-    <div class="card" style="--ac:var(--swim)">
-      <h3 id="icon-alex-slot">Alex</h3>
-      <div class="sport">50m Freistil · L10 = 25,0s</div>
-      <input type="hidden" id="alex-start" value="34.00">
-      <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
-        <input type="number" step="0.01" id="alex-now" value="34.00"></div>
-      <div class="readout">
+    <article class="ath">
+      <div class="ath-head">
+        <h3 id="icon-alex-slot">Alex</h3>
+        <div class="rule"></div>
+        <span class="sport">50m Freistil · L10 = 25,0s</span>
+      </div>
+      <input type="hidden" id="alex-start" value="39.00">
+      <div class="ath-grid">
         <div class="stat"><div class="big" id="alex-lvl">–</div><div class="lbl">Level</div></div>
         <div class="stat delta"><div class="big" id="alex-delta">–</div><div class="lbl">Zuwachs</div></div>
         <div class="stat"><div class="big goal" id="alex-next">–</div><div class="lbl">Nächstes Level</div></div>
+        <div class="entry">
+          <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
+            <input type="number" step="0.01" id="alex-now" value="34.00"></div>
+        </div>
       </div>
-      <div class="lvlname" id="alex-name"></div>
-    </div>
+      <p class="lvlname" id="alex-name"></p>
+    </article>
 
   </section>
 
-  <!-- Level-Zeiten (eigene Seite) -->
-  <section class="sharebox">
-    <h2>Level-Übersicht</h2>
-    <p class="hint">Alle Schwellen für alle drei Disziplinen — welche Zeit bzw. welcher Skill bringt welches Level.</p>
-    <a class="backtop" href="level-zeiten.html">Level-Übersicht ansehen →</a>
-  </section>
+</div>
 
-  <!-- Live-Sync-Status -->
-  <section class="sharebox">
-    <h2>Live-Sync</h2>
-    <p class="hint" id="sync-msg">Verbinde …</p>
-  </section>
-
-  <!-- Kalibrierung & Regeln -->
-  <details>
-    <summary>Wie die Skala funktioniert (Level & Kalibrierung)</summary>
-    <p>Jede Disziplin hat 10 feste Schwellen. Kalibriert ist die Leiter über Seltenheit: <code>L10</code> — Full Planche, 11,0s auf 100m, 25,0s auf 50m Freistil — schafft jeweils grob einer von 5.000 Männern zwischen 20 und 30 (Top 0,02%). L1 ist die solide trainierte Basis (10 saubere Klimmzüge, 14,0s, 39,0s — Top ~12%). Dazwischen halbiert jedes Level ungefähr die Gruppe, die es noch schafft; deshalb werden die Zeitabstände nach oben kleiner.</p>
-    <p>Bei Zeiten wird zwischen zwei Schwellen linear interpoliert — der Marker wandert also auch innerhalb eines Levels. Bei Calisthenics ist jedes Level in 4 Fortschrittsstufen unterteilt (1/4–4/4), die den gängigen Progressionen der jeweiligen Skills folgen. Wer die L1-Schwelle noch nicht geknackt hat, steht auf <code>L0</code>.</p>
-    <p>Regeln für Fairness: Baseline-Test in Woche 1 unter Zeugen, danach fix; identische Messbedingungen bei jedem Test (Handstoppung nicht mit elektronischer Zeit mischen, gleiche Bahn, gleiches Becken); Videobeweis für jede Calisthenics-Stufe in sauberer Ausführung (volle Bewegungsamplitude, kein Kipping, Haltezeiten wie angegeben).</p>
-  </details>
+  <!-- Level-Übersicht -->
+  <a class="overview-link" href="level-zeiten.html">
+    <span>Level-Übersicht<small>Alle Schwellen für alle drei Disziplinen — welche Zeit bzw. welcher Skill bringt welches Level.</small></span>
+    <span class="arrow">→</span>
+  </a>
 
   <a class="backtop" href="#top">↑ Zur Skala</a>
 
 </div>
+</main>
 
 <script>
-/* ---------- Icons ---------- */
-const ICON_RUN='<svg class="icon-run" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">'+
-  '<circle cx="12" cy="4" r="2.3" fill="currentColor"/>'+
-  '<line class="rm-torso" x1="12" y1="6.5" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
-  '<line class="rm-arm-b" x1="12" y1="8" x2="8.5" y2="12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
-  '<line class="rm-arm-f" x1="12" y1="8" x2="15.5" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
-  '<line class="rm-leg-b" x1="12" y1="15" x2="9" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
-  '<line class="rm-leg-f" x1="12" y1="15" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
+/* ---------- Icons (alle in Laufrichtung: nach rechts) ---------- */
+const ICON_RUN='<svg class="icon-run" viewBox="0 0 28 30" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">'+
+  '<circle cx="16.8" cy="4.6" r="2.4" fill="currentColor"/>'+
+  '<path d="M15.9 7.2 L13.6 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'+
+  '<path class="rn-arm-b" d="M15.6 8.6 L12.6 12.4 L15 14.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '<path class="rn-arm-f" d="M15.6 8.6 L18.6 11.8 L21.4 9.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '<path class="rn-leg-b" d="M13.6 16 L11.4 21 L7.6 23.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '<path class="rn-leg-f" d="M13.6 16 L17.4 20.6 L17 26.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'+
   '</svg>';
 
-const ICON_SWIM='<svg class="icon-swim" viewBox="0 0 30 20" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">'+
-  '<circle cx="5" cy="7" r="2.1" fill="currentColor"/>'+
-  '<line class="sm-torso" x1="7" y1="8" x2="19" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
-  '<line class="sm-arm" x1="7" y1="8" x2="7" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
-  '<line class="sm-leg-b" x1="19" y1="10" x2="24" y2="8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
-  '<line class="sm-leg-f" x1="19" y1="10" x2="24" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
-  '<path d="M1 17 Q6 15 11 17 T21 17 T29 17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".5"/>'+
+const ICON_SWIM='<svg class="icon-swim" viewBox="0 0 34 22" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">'+
+  '<g class="sw-body">'+
+  '<circle cx="26.8" cy="8.8" r="2.2" fill="currentColor"/>'+
+  '<path d="M24.6 10.8 L13.8 12.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".8"/>'+
+  '<line class="sw-leg-a" x1="13.8" y1="12.4" x2="9.2" y2="14.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".55"/>'+
+  '<line class="sw-leg-b" x1="13.8" y1="12.4" x2="9.2" y2="10.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".55"/>'+
+  '<path class="sw-arm" d="M23.8 11 L20.6 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
+  '</g>'+
+  '<path class="sw-wave" d="M-5 12.4 Q-2 11 1 12.4 T7 12.4 T13 12.4 T19 12.4 T25 12.4 T31 12.4 T37 12.4 T43 12.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".6"/>'+
+  '</svg>';
+
+/* Handstand-Lauf (Niklas) — Aufschwung, Gehen auf den Händen, Abgang */
+const STAND_PARTS=
+  '<circle cx="14" cy="5.4" r="2.2" fill="currentColor"/>'+
+  '<line x1="14" y1="7.8" x2="14" y2="16" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>'+
+  '<line x1="14" y1="9.4" x2="10.4" y2="13.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
+  '<line x1="14" y1="9.4" x2="17.6" y2="13.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
+  '<line x1="14" y1="16" x2="11" y2="22.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
+  '<line x1="14" y1="16" x2="17" y2="22.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+const ICON_KICKUP='<svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible"><g class="hs-flip">'+STAND_PARTS+'</g></svg>';
+const ICON_FLIPDOWN='<svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible"><g class="hs-flip-down">'+STAND_PARTS+'</g></svg>';
+const ICON_HANDWALK='<svg class="icon-hw" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">'+
+  '<line class="hw-leg-a" x1="14" y1="9.6" x2="9.6" y2="3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
+  '<line class="hw-leg-b" x1="14" y1="9.6" x2="18.4" y2="3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
+  '<line x1="14" y1="9.6" x2="14" y2="17.6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>'+
+  '<circle cx="14" cy="20.6" r="2.1" fill="currentColor"/>'+
+  '<line class="hw-arm-a" x1="14" y1="17.6" x2="11.6" y2="24.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
+  '<line class="hw-arm-b" x1="14" y1="17.6" x2="16.4" y2="24.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'+
   '</svg>';
 
 function iconFlex(level){
   const t=Math.max(1,Math.min(10,level||1));
-  const torsoW=(2+t*0.35).toFixed(2);
-  const armW=(1.6+t*0.32).toFixed(2);
-  const bicepR=(1+t*0.32).toFixed(2);
-  const legW=(1.8+t*0.18).toFixed(2);
-  const spread=(2.2+t*0.25).toFixed(2);
-  const lx=(12-spread).toFixed(2), rx=(12+parseFloat(spread)).toFixed(2);
-  const lfx=(9-spread*0.2).toFixed(2), rfx=(15+spread*0.2).toFixed(2);
+  const torsoW=(2+t*0.22).toFixed(2);
+  const armW=(1.6+t*0.2).toFixed(2);
+  const bicepR=(0.9+t*0.18).toFixed(2);
+  const legW=(1.8+t*0.14).toFixed(2);
+  const e=3.4+t*0.32;                // Ellbogen-Abstand von der Mitte
+  const f=e+1.3;                     // Faust-Abstand
+  const lex=(12-e).toFixed(2), rex=(12+e).toFixed(2);
+  const lfx=(12-f).toFixed(2), rfx=(12+f).toFixed(2);
+  const lbx=(12-e*0.7).toFixed(2), rbx=(12+e*0.7).toFixed(2); // Bizeps auf dem Oberarm
   return '<svg class="icon-flex" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">'+
     '<circle cx="12" cy="4.2" r="2.3" fill="currentColor"/>'+
     '<line x1="12" y1="6.8" x2="12" y2="17" stroke="currentColor" stroke-width="'+torsoW+'" stroke-linecap="round"/>'+
-    '<line x1="12" y1="17" x2="9" y2="25" stroke="currentColor" stroke-width="'+legW+'" stroke-linecap="round"/>'+
-    '<line x1="12" y1="17" x2="15" y2="25" stroke="currentColor" stroke-width="'+legW+'" stroke-linecap="round"/>'+
-    '<path d="M12 8 L'+lx+' 11 L'+lfx+' 7" stroke="currentColor" stroke-width="'+armW+'" stroke-linecap="round" stroke-linejoin="round"/>'+
-    '<path d="M12 8 L'+rx+' 11 L'+rfx+' 7" stroke="currentColor" stroke-width="'+armW+'" stroke-linecap="round" stroke-linejoin="round"/>'+
-    '<circle cx="'+lx+'" cy="11" r="'+bicepR+'" fill="currentColor" opacity=".9"/>'+
-    '<circle cx="'+rx+'" cy="11" r="'+bicepR+'" fill="currentColor" opacity=".9"/>'+
+    '<line x1="12" y1="17" x2="9.2" y2="25" stroke="currentColor" stroke-width="'+legW+'" stroke-linecap="round"/>'+
+    '<line x1="12" y1="17" x2="14.8" y2="25" stroke="currentColor" stroke-width="'+legW+'" stroke-linecap="round"/>'+
+    '<path d="M12 9 L'+lex+' 12 L'+lfx+' 6.6" stroke="currentColor" stroke-width="'+armW+'" stroke-linecap="round" stroke-linejoin="round"/>'+
+    '<path d="M12 9 L'+rex+' 12 L'+rfx+' 6.6" stroke="currentColor" stroke-width="'+armW+'" stroke-linecap="round" stroke-linejoin="round"/>'+
+    '<circle cx="'+lbx+'" cy="10.6" r="'+bicepR+'" fill="currentColor" opacity=".9"/>'+
+    '<circle cx="'+rbx+'" cy="10.6" r="'+bicepR+'" fill="currentColor" opacity=".9"/>'+
     '</svg>';
 }
 
@@ -322,15 +395,18 @@ function fmtPct(p){
 }
 function fmtT(t){ return t.toFixed(1).replace('.',',')+' s'; }
 
-/* ---------- Ticks (L1 bei 10% … L10 bei 100%) ---------- */
+/* ---------- Ticks (L1 bei 0% … L10 bei 100% — alle starten auf L1) ---------- */
 const ticks=document.getElementById('ticks');
 for(let i=1;i<=10;i++){
   const d=document.createElement('div');
   d.className='tick'+(i===10?' t10':'');
-  d.style.left=(i*10)+'%';
+  d.style.left=((i-1)/9*100)+'%';
   d.innerHTML='<span>L'+i+'</span>';
   ticks.appendChild(d);
 }
+
+/* Level (1..10) -> Position auf der Skala; unter L1 wird an den Start geklemmt */
+function posOf(v){ return Math.max(0,Math.min(100,(v-1)/9*100)); }
 
 /* ---------- Calisthenics: Level + Fortschrittsstufe ----------
    Kombinierter Wert (0..10) wird im versteckten Feld #niklas-now gehalten:
@@ -393,10 +469,10 @@ decomposeNiklasNow();
 
 /* ---------- Athleten ---------- */
 const A=[
- {id:'fynn',   name:'Fynn',   sport:'100m Sprint',   color:'var(--sprint)',
+ {id:'fynn',   name:'Fynn',   sport:'100m Sprint',
    get:(k)=>levelFloatTime('sprint', parseFloat(document.getElementById('fynn-'+k).value)),
    next:(lv)=>lv>=10?'—':'≤ '+fmtT(LEVELS.sprint[lv])},
- {id:'niklas', name:'Niklas', sport:'Calisthenics',  color:'var(--cali)',
+ {id:'niklas', name:'Niklas', sport:'Calisthenics',
    get:(k)=>Math.max(0,Math.min(10,parseFloat(document.getElementById('niklas-'+k).value)||0)),
    next:(v)=>{
      const totalQ=Math.round(v*4);
@@ -404,15 +480,36 @@ const A=[
      const nq=totalQ+1, nlv=Math.ceil(nq/4), nst=((nq-1)%4)+1;
      return 'L'+nlv+' · '+nst+'/4: '+CALI_STAGES[nlv-1][nst-1];
    }},
- {id:'alex',   name:'Alex',   sport:'50m Freistil',  color:'var(--swim)',
+ {id:'alex',   name:'Alex',   sport:'50m Freistil',
    get:(k)=>levelFloatTime('swim', parseFloat(document.getElementById('alex-'+k).value)),
    next:(lv)=>lv>=10?'—':'≤ '+fmtT(LEVELS.swim[lv])}
 ];
 
 function iconFor(a,lv){ return a.id==='niklas' ? iconFlex(lv) : (a.id==='fynn' ? ICON_RUN : ICON_SWIM); }
 
+/* ---------- Skala: Zeilen werden einmal gebaut, danach nur bewegt ---------- */
+const rowEls={};
+const lastIcon={};
+const traveling={fynn:false,niklas:false,alex:false};
+let entranceDone=false;
+
+function setupRows(){
+  for(const a of A){
+    const row=document.getElementById('row-'+a.id);
+    row.classList.add('pending');
+    row.innerHTML='<div class="seg"></div><div class="marker"></div><div class="athlabel"></div>';
+    rowEls[a.id]={row,seg:row.children[0],marker:row.children[1],label:row.children[2]};
+  }
+}
+
+function buildLegend(){
+  const h=[];
+  for(const a of A){ h.push('<div>'+(lastIcon[a.id]||iconFor(a,1))+a.name+' · '+a.sport+'</div>'); }
+  document.getElementById('legend').innerHTML=h.join('');
+}
+
 function render(){
-  const legendHtml=[];
+  let legendDirty=false;
   for(const a of A){
     const vs=a.get('start'), vn=a.get('now');
     const lv=Math.floor(vn), d=vn-vs;
@@ -422,22 +519,61 @@ function render(){
     document.getElementById(a.id+'-name').textContent= lv>0 ? 'Top '+fmtPct(TOP_PCT[lv-1])+' der 20–30-Jährigen' : 'noch unter Level 1';
     const icon=iconFor(a,lv);
     if(a.id==='niklas'){ document.getElementById('icon-niklas-slot').innerHTML=icon+'Niklas'; }
-    // Leiter: Position = levelFloat/10
-    const row=document.getElementById('row-'+a.id);
-    const x0=vs*10, x1=vn*10;
-    row.innerHTML=
-      '<div class="seg" style="left:'+Math.min(x0,x1)+'%;width:'+Math.abs(x1-x0)+'%;background:'+a.color+'"></div>'+
-      '<div class="ghost" style="left:'+x0+'%;color:'+a.color+'"></div>'+
-      '<div class="marker" style="left:'+x1+'%;color:'+a.color+'">'+icon+'</div>'+
-      '<div class="athlabel" style="left:'+x1+'%;color:'+a.color+'">'+a.name.toUpperCase()+' · L'+lv+'</div>';
-    legendHtml.push('<div style="color:'+a.color+'">'+icon+a.name+' · '+a.sport+'</div>');
+    const E=rowEls[a.id];
+    if(!traveling[a.id] && lastIcon[a.id]!==icon){ E.marker.innerHTML=icon; lastIcon[a.id]=icon; legendDirty=true; }
+    E.label.textContent=a.name.toUpperCase()+' · L'+lv;
+    if(entranceDone && !traveling[a.id]){
+      const x0=posOf(vs), x1=posOf(vn);
+      E.seg.style.left=Math.min(x0,x1)+'%'; E.seg.style.width=Math.abs(x1-x0)+'%';
+      E.marker.style.left=x1+'%'; E.label.style.left=x1+'%';
+    }
   }
-  legendHtml.push('<div><span class="swatch" style="border:2px dashed var(--faint);background:transparent"></span>gestrichelt = Startpunkt</div>');
-  document.getElementById('legend').innerHTML=legendHtml.join('');
+  if(legendDirty) buildLegend();
 }
 
-/* ---------- Live-Sync über Netlify Function + Blobs ---------- */
-const FIELDS=['fynn-start','fynn-now','niklas-start','niklas-now','alex-start','alex-now'];
+/* ---------- Anreise beim Seitenstart: jeder läuft/schwimmt/schlägt Rad zu seinem Level ---------- */
+function startEntrance(){
+  if(entranceDone) return; entranceDone=true;
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for(const a of A){
+    const E=rowEls[a.id];
+    const vs=a.get('start'), vn=a.get('now');
+    const x0=posOf(vs), x1=posOf(vn);
+    E.row.classList.remove('pending');
+    if(reduce || x1<0.5){
+      E.marker.style.left=x1+'%'; E.label.style.left=x1+'%';
+      E.seg.style.left=Math.min(x0,x1)+'%'; E.seg.style.width=Math.abs(x1-x0)+'%';
+      continue;
+    }
+    traveling[a.id]=true;
+    const dur=Math.min(4.2,.5+(vn-1)*.36);
+    const ease='cubic-bezier(.35,.1,.45,1)';
+    E.marker.style.transition='none'; E.label.style.transition='none';
+    E.marker.style.left='0%'; E.label.style.left='0%';
+    E.seg.style.left=Math.min(x0,x1)+'%'; E.seg.style.width='0%';
+    if(a.id==='niklas'){
+      E.marker.innerHTML=ICON_KICKUP; // Aufschwung in den Handstand
+      setTimeout(()=>{ if(traveling.niklas) E.marker.innerHTML=ICON_HANDWALK; },560);
+    }
+    void E.marker.offsetWidth; // Reflow, damit die Startposition greift
+    E.marker.style.transition='left '+dur+'s '+ease;
+    E.label.style.transition='left '+dur+'s '+ease;
+    E.marker.style.left=x1+'%'; E.label.style.left=x1+'%';
+    setTimeout(()=>{
+      E.marker.style.transition=''; E.label.style.transition='';
+      E.seg.style.width=Math.abs(x1-x0)+'%';
+      const done=()=>{ traveling[a.id]=false; lastIcon[a.id]=''; render(); };
+      if(a.id==='niklas'){
+        E.marker.innerHTML=ICON_FLIPDOWN; // Abgang aus dem Handstand
+        setTimeout(done,600);             // danach Flex-Pose
+      }else{ done(); }
+    },dur*1000+80);
+  }
+}
+
+/* ---------- Sync über Netlify Function + Blobs (läuft still im Hintergrund) ----------
+   Startwerte sind fix auf L1 und werden nicht mehr synchronisiert. */
+const FIELDS=['fynn-now','niklas-now','alex-now'];
 const API='/api/state';
 const syncMsg=document.getElementById('sync-msg');
 let pushTimer=null;
@@ -458,7 +594,7 @@ async function pullState(){
     const res=await fetch(API);
     const state=await res.json();
     applyState(state);
-    syncMsg.textContent='Live synchronisiert · zuletzt aktualisiert '+new Date().toLocaleTimeString('de-DE');
+    syncMsg.textContent='';
   }catch(e){
     syncMsg.textContent='Sync fehlgeschlagen — Änderungen werden nur lokal angezeigt.';
   }
@@ -485,8 +621,30 @@ document.querySelectorAll('input,select').forEach(el=>{
   if(el===levelSel||el===stageSel) return; // haben eigene change-Handler, die das versteckte Feld füttern
   el.addEventListener('input',()=>{ render(); scheduleSave(); });
 });
+
+/* ---------- Eigene Stepper-Pfeile für Zahlenfelder ---------- */
+document.querySelectorAll('.field input[type=number]').forEach(inp=>{
+  const wrap=document.createElement('div');
+  wrap.className='step';
+  const mk=(dir)=>{
+    const b=document.createElement('button');
+    b.type='button'; b.tabIndex=-1;
+    b.innerHTML='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="'+(dir>0?'M2 8 L6 4 L10 8':'M2 4 L6 8 L10 4')+'"/></svg>';
+    b.addEventListener('click',()=>{
+      const step=parseFloat(inp.step)||1;
+      const v=(parseFloat(inp.value)||0)+dir*step;
+      inp.value=v.toFixed(2);
+      inp.dispatchEvent(new Event('input'));
+    });
+    return b;
+  };
+  wrap.appendChild(mk(1)); wrap.appendChild(mk(-1));
+  inp.closest('.field').appendChild(wrap);
+});
+setupRows();
 render();
-pullState();
+pullState().then(startEntrance);
+setTimeout(startEntrance,3000); // Fallback, falls der erste Sync hängt
 setInterval(pullState,4000);
 </script>
 </body>

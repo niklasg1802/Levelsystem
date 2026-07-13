@@ -1,12 +1,10 @@
 import { getStore } from "@netlify/blobs";
 
+// Alle starten auf Level 1 (Startwerte sind clientseitig fix)
 const DEFAULT_STATE = {
-  "fynn-start": "15.00",
-  "fynn-now": "15.00",
-  "niklas-start": "0",
-  "niklas-now": "0",
-  "alex-start": "34.00",
-  "alex-now": "34.00"
+  "fynn-now": "14.00",
+  "niklas-now": "1",
+  "alex-now": "39.00"
 };
 
 const cors = {
