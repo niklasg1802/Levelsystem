@@ -22,7 +22,7 @@ export default async (req) => {
     return new Response(null, { headers: cors });
   }
 
-  const store = getStore("progress");
+  const store = getStore({ name: "progress", consistency: "strong" });
 
   if (req.method === "GET") {
     const data = await store.get("state", { type: "json" });
