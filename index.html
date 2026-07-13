@@ -85,12 +85,14 @@ body{background:var(--bg);color:var(--txt);font-family:'Space Grotesk',system-ui
 .field label{display:block;font-size:12px;color:var(--dim);margin-bottom:6px}
 .field input,.field select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--txt);font-family:'JetBrains Mono';font-size:15px;outline:none;transition:border-color .15s}
 .field input:focus,.field select:focus{border-color:var(--ac)}
+.field.stage{display:none}
+.field.stage.show{display:block}
 .readout{display:flex;gap:10px;margin-top:16px}
 .stat{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;text-align:center}
 .stat .big{font-family:'Unbounded';font-size:24px;font-weight:900;color:var(--ac);line-height:1}
-.stat .big.goal{font-family:'JetBrains Mono';font-size:13px;font-weight:600;color:var(--txt);line-height:1.35;padding-top:5px;min-height:32px;display:flex;align-items:center;justify-content:center}
+.stat .big.goal{font-family:'JetBrains Mono';font-size:12px;font-weight:600;color:var(--txt);line-height:1.35;padding-top:5px;min-height:32px;display:flex;align-items:center;justify-content:center}
 .stat .lbl{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;margin-top:6px;font-family:'JetBrains Mono'}
-.stat.delta .big{color:var(--txt)}
+.stat.delta .big{color:var(--txt);font-size:20px}
 .lvlname{margin-top:12px;font-size:13px;color:var(--dim);text-align:center;min-height:18px}
 
 .hint{font-size:12px;color:var(--faint);margin-top:14px;line-height:1.6}
@@ -139,7 +141,7 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
 
   <section class="update-head">
     <h2>Werte aktualisieren</h2>
-    <p>Trag hier deine Startzeit/-skill und deinen aktuellen Stand ein. Jede Änderung wird automatisch gespeichert und erscheint live in der Skala oben — bei dir und bei allen anderen.</p>
+    <p>Trag hier deinen aktuellen Stand ein. Die Baseline aus Woche 1 ist fix und fließt weiter in den Zuwachs ein. Jede Änderung wird automatisch gespeichert und erscheint live in der Skala oben — bei dir und bei allen anderen.</p>
   </section>
 
   <!-- Eingabe-Karten -->
@@ -148,14 +150,13 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
     <div class="card" style="--ac:var(--sprint)">
       <h3 id="icon-fynn-slot">Fynn</h3>
       <div class="sport">100m Sprint · L10 = 11,0s</div>
-      <div class="field"><label>Startzeit (Baseline, Sekunden)</label>
-        <input type="number" step="0.01" id="fynn-start" value="15.00"></div>
+      <input type="hidden" id="fynn-start" value="15.00">
       <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
         <input type="number" step="0.01" id="fynn-now" value="15.00"></div>
       <div class="readout">
         <div class="stat"><div class="big" id="fynn-lvl">–</div><div class="lbl">Level</div></div>
         <div class="stat delta"><div class="big" id="fynn-delta">–</div><div class="lbl">Zuwachs</div></div>
-        <div class="stat"><div class="big goal" id="fynn-next">–</div><div class="lbl">Nächstes Ziel</div></div>
+        <div class="stat"><div class="big goal" id="fynn-next">–</div><div class="lbl">Nächstes Level</div></div>
       </div>
       <div class="lvlname" id="fynn-name"></div>
     </div>
@@ -163,14 +164,16 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
     <div class="card" style="--ac:var(--cali)">
       <h3 id="icon-niklas-slot">Niklas</h3>
       <div class="sport">Calisthenics · L10 = Full Planche</div>
-      <div class="field"><label>Start-Benchmark (höchster sauberer Skill)</label>
-        <select id="niklas-start"></select></div>
+      <input type="hidden" id="niklas-start" value="0">
+      <input type="hidden" id="niklas-now" value="0">
       <div class="field"><label>Aktueller Benchmark</label>
-        <select id="niklas-now"></select></div>
+        <select id="niklas-now-level"></select></div>
+      <div class="field stage" id="niklas-stage-field"><label>Fortschritt in diesem Level</label>
+        <select id="niklas-now-stage"></select></div>
       <div class="readout">
         <div class="stat"><div class="big" id="niklas-lvl">–</div><div class="lbl">Level</div></div>
         <div class="stat delta"><div class="big" id="niklas-delta">–</div><div class="lbl">Zuwachs</div></div>
-        <div class="stat"><div class="big goal" id="niklas-next">–</div><div class="lbl">Nächstes Ziel</div></div>
+        <div class="stat"><div class="big goal" id="niklas-next">–</div><div class="lbl">Nächstes Level</div></div>
       </div>
       <div class="lvlname" id="niklas-name"></div>
     </div>
@@ -178,14 +181,13 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
     <div class="card" style="--ac:var(--swim)">
       <h3 id="icon-alex-slot">Alex</h3>
       <div class="sport">50m Freistil · L10 = 25,0s</div>
-      <div class="field"><label>Startzeit (Baseline, Sekunden)</label>
-        <input type="number" step="0.01" id="alex-start" value="34.00"></div>
+      <input type="hidden" id="alex-start" value="34.00">
       <div class="field"><label>Aktuelle Bestzeit (Sekunden)</label>
         <input type="number" step="0.01" id="alex-now" value="34.00"></div>
       <div class="readout">
         <div class="stat"><div class="big" id="alex-lvl">–</div><div class="lbl">Level</div></div>
         <div class="stat delta"><div class="big" id="alex-delta">–</div><div class="lbl">Zuwachs</div></div>
-        <div class="stat"><div class="big goal" id="alex-next">–</div><div class="lbl">Nächstes Ziel</div></div>
+        <div class="stat"><div class="big goal" id="alex-next">–</div><div class="lbl">Nächstes Level</div></div>
       </div>
       <div class="lvlname" id="alex-name"></div>
     </div>
@@ -209,8 +211,8 @@ details code{font-family:'JetBrains Mono';font-size:12px;color:var(--gold);backg
   <details>
     <summary>Wie die Skala funktioniert (Level & Kalibrierung)</summary>
     <p>Jede Disziplin hat 10 feste Schwellen. Kalibriert ist die Leiter über Seltenheit: <code>L10</code> — Full Planche, 11,0s auf 100m, 25,0s auf 50m Freistil — schafft jeweils grob einer von 5.000 Männern zwischen 20 und 30 (Top 0,02%). L1 ist die solide trainierte Basis (10 saubere Klimmzüge, 14,0s, 39,0s — Top ~12%). Dazwischen halbiert jedes Level ungefähr die Gruppe, die es noch schafft; deshalb werden die Zeitabstände nach oben kleiner.</p>
-    <p>Bei Zeiten wird zwischen zwei Schwellen linear interpoliert — der Marker wandert also auch innerhalb eines Levels. Wer die L1-Schwelle noch nicht geknackt hat, steht auf <code>L0</code>.</p>
-    <p>Regeln für Fairness: Baseline-Test in Woche 1 unter Zeugen; identische Messbedingungen bei Start- und Endtest (Handstoppung nicht mit elektronischer Zeit mischen, gleiche Bahn, gleiches Becken); Videobeweis für jeden Calisthenics-Benchmark in sauberer Ausführung (volle Bewegungsamplitude, kein Kipping, Haltezeiten wie angegeben).</p>
+    <p>Bei Zeiten wird zwischen zwei Schwellen linear interpoliert — der Marker wandert also auch innerhalb eines Levels. Bei Calisthenics ist jedes Level in 4 Fortschrittsstufen unterteilt (1/4–4/4), die den gängigen Progressionen der jeweiligen Skills folgen. Wer die L1-Schwelle noch nicht geknackt hat, steht auf <code>L0</code>.</p>
+    <p>Regeln für Fairness: Baseline-Test in Woche 1 unter Zeugen, danach fix; identische Messbedingungen bei jedem Test (Handstoppung nicht mit elektronischer Zeit mischen, gleiche Bahn, gleiches Becken); Videobeweis für jede Calisthenics-Stufe in sauberer Ausführung (volle Bewegungsamplitude, kein Kipping, Haltezeiten wie angegeben).</p>
   </details>
 
   <a class="backtop" href="#top">↑ Zur Skala</a>
@@ -282,6 +284,20 @@ const CALI=[
   "Straddle Planche 5s",
   "Full Planche 5s"
 ];
+/* Vier Fortschrittsstufen je Level, entlang der gängigen Progression
+   (Tuck -> Advanced Tuck -> Straddle/Teilbewegung -> volle Ausführung). Stufe 4/4 = CALI[i]. */
+const CALI_STAGES=[
+  ["3 Klimmzüge","5 Klimmzüge","8 Klimmzüge","10 Klimmzüge"],
+  ["Tuck L-Sit 10s","One Leg Extended L-Sit 10s","L-Sit 10s","L-Sit 15s"],
+  ["Freier Handstand 5s","Freier Handstand 10s","Freier Handstand 15s","Freier Handstand 20s"],
+  ["Explosive Klimmzüge zur Brust","Negative Muscle-up (3s runter)","Muscle-up mit Kipp","Muscle-up strict"],
+  ["Tuck Back Lever 10s","Advanced Tuck Back Lever 10s","Straddle Back Lever 5s","Back Lever full 5s"],
+  ["Tuck Front Lever 10s","Advanced Tuck Front Lever 10s","Single Leg Front Lever 5s","Front Lever Straddle 5s"],
+  ["Tuck Press to Handstand","Straddle Press (Knie unterstützt)","Straddle Press (Arme leicht gebeugt)","Straddle Press to Handstand"],
+  ["Front Lever Straddle 10s","Half Lay Front Lever 5s","Front Lever full 3s","Front Lever full 5s"],
+  ["Tuck Planche 10s","Advanced Tuck Planche 10s","Straddle Planche 3s","Straddle Planche 5s"],
+  ["Straddle Planche 10s","Maltese-Lean / Half Planche 5s","Full Planche 3s","Full Planche 5s"]
+];
 const TOP_PCT=[12,6,3,1.5,0.8,0.4,0.2,0.1,0.05,0.02];
 
 /* levelFloat: 0..10 — Ganzzahl = erreichtes Level, Nachkomma = Fortschritt zur nächsten Schwelle */
@@ -316,14 +332,64 @@ for(let i=1;i<=10;i++){
   ticks.appendChild(d);
 }
 
-/* ---------- Benchmark-Dropdowns ---------- */
-for(const id of ['niklas-start','niklas-now']){
-  const sel=document.getElementById(id);
-  const none=document.createElement('option');none.value=0;none.textContent='— unter L1 —';sel.appendChild(none);
-  CALI.forEach((n,i)=>{const o=document.createElement('option');o.value=i+1;o.textContent='L'+(i+1)+' · '+n;sel.appendChild(o);});
+/* ---------- Calisthenics: Level + Fortschrittsstufe ----------
+   Kombinierter Wert (0..10) wird im versteckten Feld #niklas-now gehalten:
+   value = (Level-1) + Stufe/4. Die zwei sichtbaren Dropdowns sind nur UI. */
+const levelSel=document.getElementById('niklas-now-level');
+const stageSel=document.getElementById('niklas-now-stage');
+const stageField=document.getElementById('niklas-stage-field');
+const niklasNowHidden=document.getElementById('niklas-now');
+
+const none0=document.createElement('option');none0.value=0;none0.textContent='— unter L1 —';levelSel.appendChild(none0);
+CALI.forEach((n,i)=>{const o=document.createElement('option');o.value=i+1;o.textContent='L'+(i+1)+' · '+n;levelSel.appendChild(o);});
+
+function populateStageOptions(level){
+  stageSel.innerHTML='';
+  if(level<1) return;
+  CALI_STAGES[level-1].forEach((label,i)=>{
+    const o=document.createElement('option');
+    o.value=i+1;
+    o.textContent=(i+1)+'/4 · '+label;
+    stageSel.appendChild(o);
+  });
 }
-document.getElementById('niklas-start').value=0;
-document.getElementById('niklas-now').value=0;
+
+function decomposeNiklasNow(){
+  const v=Math.max(0,Math.min(10,parseFloat(niklasNowHidden.value)||0));
+  if(v<=0){
+    levelSel.value=0;
+    stageField.classList.remove('show');
+    return;
+  }
+  const level=Math.ceil(v-1e-9);
+  const stage=Math.max(1,Math.min(4,Math.round((v-(level-1))*4)));
+  populateStageOptions(level);
+  levelSel.value=level;
+  stageSel.value=stage;
+  stageField.classList.add('show');
+}
+
+function composeNiklasNow(){
+  const level=parseInt(levelSel.value)||0;
+  if(level<1){
+    stageField.classList.remove('show');
+    niklasNowHidden.value='0';
+  }else{
+    const stage=parseInt(stageSel.value)||4;
+    niklasNowHidden.value=((level-1)+stage/4).toFixed(2);
+  }
+  niklasNowHidden.dispatchEvent(new Event('input'));
+}
+
+levelSel.addEventListener('change',()=>{
+  const level=parseInt(levelSel.value)||0;
+  if(level<1){ stageField.classList.remove('show'); }
+  else{ populateStageOptions(level); stageSel.value=1; stageField.classList.add('show'); }
+  composeNiklasNow();
+});
+stageSel.addEventListener('change', composeNiklasNow);
+
+decomposeNiklasNow();
 
 /* ---------- Athleten ---------- */
 const A=[
@@ -331,8 +397,13 @@ const A=[
    get:(k)=>levelFloatTime('sprint', parseFloat(document.getElementById('fynn-'+k).value)),
    next:(lv)=>lv>=10?'—':'≤ '+fmtT(LEVELS.sprint[lv])},
  {id:'niklas', name:'Niklas', sport:'Calisthenics',  color:'var(--cali)',
-   get:(k)=>Math.max(0,Math.min(10,parseInt(document.getElementById('niklas-'+k).value)||0)),
-   next:(lv)=>lv>=10?'—':CALI[lv]},
+   get:(k)=>Math.max(0,Math.min(10,parseFloat(document.getElementById('niklas-'+k).value)||0)),
+   next:(v)=>{
+     const totalQ=Math.round(v*4);
+     if(totalQ>=40) return '—';
+     const nq=totalQ+1, nlv=Math.ceil(nq/4), nst=((nq-1)%4)+1;
+     return 'L'+nlv+' · '+nst+'/4: '+CALI_STAGES[nlv-1][nst-1];
+   }},
  {id:'alex',   name:'Alex',   sport:'50m Freistil',  color:'var(--swim)',
    get:(k)=>levelFloatTime('swim', parseFloat(document.getElementById('alex-'+k).value)),
    next:(lv)=>lv>=10?'—':'≤ '+fmtT(LEVELS.swim[lv])}
@@ -346,8 +417,8 @@ function render(){
     const vs=a.get('start'), vn=a.get('now');
     const lv=Math.floor(vn), d=vn-vs;
     document.getElementById(a.id+'-lvl').textContent='L'+lv;
-    document.getElementById(a.id+'-delta').textContent=(d>=0?'+':'')+d.toFixed(1).replace('.',',')+' Lv';
-    document.getElementById(a.id+'-next').textContent=a.next(lv);
+    document.getElementById(a.id+'-delta').textContent=(d>=0?'+':'')+d.toFixed(2)+'Lv';
+    document.getElementById(a.id+'-next').textContent= a.id==='niklas' ? a.next(vn) : a.next(lv);
     document.getElementById(a.id+'-name').textContent= lv>0 ? 'Top '+fmtPct(TOP_PCT[lv-1])+' der 20–30-Jährigen' : 'noch unter Level 1';
     const icon=iconFor(a,lv);
     if(a.id==='niklas'){ document.getElementById('icon-niklas-slot').innerHTML=icon+'Niklas'; }
@@ -378,6 +449,7 @@ function applyState(state){
     if(document.activeElement===el) return; // eigene Eingabe nicht überschreiben
     if(el.value!==String(state[f])) el.value=state[f];
   });
+  if(document.activeElement!==levelSel && document.activeElement!==stageSel){ decomposeNiklasNow(); }
   render();
 }
 
@@ -409,7 +481,10 @@ function scheduleSave(){
   pushTimer=setTimeout(pushState,600);
 }
 
-document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>{ render(); scheduleSave(); }));
+document.querySelectorAll('input,select').forEach(el=>{
+  if(el===levelSel||el===stageSel) return; // haben eigene change-Handler, die das versteckte Feld füttern
+  el.addEventListener('input',()=>{ render(); scheduleSave(); });
+});
 render();
 pullState();
 setInterval(pullState,4000);
